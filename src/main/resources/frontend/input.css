@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* Le dice a Tailwind que escanee tus archivos HTML de Thymeleaf */
+@source "../templates/**/*.html";

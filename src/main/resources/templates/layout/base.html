@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org" th:fragment="pagina(contenido)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAFE - Gestión de Certificados</title>
+    <!-- 1. Importar el CSS (Opcional) -->
+    <link th:href="@{/css/sweetalert2.min.css}" rel="stylesheet">
+
+    <!-- 2. Importar el JavaScript de SweetAlert2 -->
+    <script th:src="@{/js/sweetalert2.all.min.js}"></script>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link th:href="@{/css/animate.min.css}" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 antialiased">
+
+<!-- ========================================== -->
+<!-- HEADER: Cabecera y Menú Fijo Superior     -->
+<!-- ========================================== -->
+<div class="fixed top-0 left-0 right-0 z-50">
+    <!-- Primer Nav: Cabecera de Usuario -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center" aria-label="Cabecera principal de usuario">
+        <div class="flex items-center gap-4">
+            <div class="text-2xl font-black tracking-tight text-blue-800">UAFE</div>
+            <div class="h-6 w-px bg-gray-300 mx-2"></div>
+            <span class="text-sm text-gray-500 font-semibold tracking-wide">Dashboard de Trámites</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <!-- Identificación del Operador -->
+            <div class="flex items-center gap-3 bg-gray-100/80 border border-gray-200/40 px-3 py-1.5 rounded-full shadow-sm">
+                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-black uppercase shadow-inner"
+                     th:text="${#strings.substring(user.nombre,0,2)}">
+                </div>
+                <div class="text-xs">
+                    <p class="font-bold leading-tight uppercase text-gray-800" th:text="${user.nombre}"></p>
+                    <p class="text-green-600 flex items-center gap-1 font-medium mt-0.5">
+                        ● <span class="text-gray-500 font-semibold tracking-wider text-[10px]" th:text="${user.tipo}">En línea</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Botón Salir -->
+            <form th:action="@{/auth/logout}" method="POST" class="inline">
+                <button type="submit" class="inline-flex items-center gap-2 text-red-500 hover:text-red-700 text-sm font-bold transition-colors bg-transparent border-0 p-0 cursor-pointer focus:outline-none">
+                    <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                    </svg>
+                    <span>Salir</span>
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Segundo Nav: Menú Jerárquico Infinito -->
+    <nav class="bg-white text-gray-800 shadow-md p-4 border-b border-gray-200">
+        <ul class="flex space-x-8 items-center">
+            <li th:each="menu : ${user.menus}" th:if="${menu.idMenuPadre == null}" class="relative group">
+                <th:block th:with="hijos=${#lists.toList(user.menus).?[idMenuPadre == __${menu.idMenu}__]}">
+
+                    <div th:if="${not #lists.isEmpty(hijos)}" class="flex items-center space-x-1 cursor-pointer hover:text-blue-700 transition-colors py-1">
+                        <div class="w-5 h-5 flex items-center justify-center text-current" th:utext="${menu.img}"></div>
+                        <span class="font-medium" th:text="${menu.etiqueta}">Padre</span>
+                        <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 transition-transform group-hover:rotate-180">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </div>
+
+                    <a th:if="${#lists.isEmpty(hijos)}" th:href="@{{path}(path=${menu.accion})}" class="flex items-center space-x-3 hover:text-blue-700 transition-colors py-1">
+                        <div class="w-5 h-5 flex items-center justify-center text-current" th:utext="${menu.img}"></div>
+                        <span class="font-medium" th:text="${menu.etiqueta}">Enlace</span>
+                    </a>
+
+                    <div th:if="${not #lists.isEmpty(hijos)}" class="absolute left-0 top-full hidden group-hover:block pt-2 z-50">
+                        <ul th:replace="~{::renderSubmenus(listaHijos=${hijos}, todosLosMenus=${user.menus})}"></ul>
+                    </div>
+                </th:block>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Fragmento Auxiliar Recursivo (Oculto del flujo visual directo) -->
+<ul th:fragment="renderSubmenus(listaHijos, todosLosMenus)" class="bg-white border border-gray-200 rounded-lg shadow-xl min-w-[220px] py-1">
+    <li th:each="sub : ${listaHijos}" class="relative group/sub">
+        <th:block th:with="nietos=${#lists.toList(todosLosMenus).?[idMenuPadre == __${sub.idMenu}__]}">
+
+            <div th:if="${not #lists.isEmpty(nietos)}" class="flex items-center justify-between w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700 cursor-pointer whitespace-nowrap">
+                <div class="flex items-center space-x-3">
+                    <div class="w-4 h-4 flex items-center justify-center text-gray-400" th:utext="${sub.img}"></div>
+                    <span th:text="${sub.etiqueta}">Submenú</span>
+                </div>
+                <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3 text-gray-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </div>
+
+            <a th:if="${#lists.isEmpty(nietos)}" th:href="@{{path}(path=${sub.accion})}" class="flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700 transition-colors whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center text-gray-400" th:utext="${sub.img}"></div>
+                <span th:text="${sub.etiqueta}">Submenú Final</span>
+            </a>
+
+            <div th:if="${not #lists.isEmpty(nietos)}" class="absolute left-full top-0 hidden group-hover/sub:block pl-1 z-50">
+                <ul th:replace="~{::renderSubmenus(listaHijos=${nietos}, todosLosMenus=${todosLosMenus})}"></ul>
+            </div>
+        </th:block>
+    </li>
+</ul>
+
+<!-- Espaciador Obligatorio de la Cabecera Fija -->
+<div class="h-[125px]"></div>
+
+<!-- ========================================== -->
+<!-- CONTENIDO DINÁMICO (Inyectado por la vista)-->
+<!-- ========================================== -->
+<main class="flex-grow max-w-full w-full mx-auto p-6 animate__animated animate__fadeIn animate__repeat-1">
+    <!-- Banner Condicional de Notificación de Errores -->
+    <!--<div th:if="${errorStatus}" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl mb-6 shadow-sm border border-red-100" role="alert">
+        <div class="flex flex-col">
+            <h3 class="text-sm font-bold text-red-900" th:text="${errorStatus}">Código Error</h3>
+            <div class="text-xs text-red-700 mt-1 font-medium" th:text="${errorMessage}">Mensaje aclaratorio del fallo de validación de Spring.</div>
+        </div>
+    </div>-->
+    <!-- Reemplaza tu div anterior por este bloque de script -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Capturamos las variables de Thymeleaf de forma segura
+        const errorStatus = /*[[${errorStatus}]]*/ null;
+        const errorMessage = /*[[${errorMessage}]]*/ null;
+
+        // Si existe un estado de error, disparamos SweetAlert2
+        if (errorStatus) {
+            Swal.fire({
+                icon: 'error',
+                title: errorStatus, // Muestra el "Código Error"
+                text: errorMessage || 'Ocurrió un error inesperado.', // Muestra el mensaje de validación
+                confirmButtonColor: '#ef4444', // Color rojo que combina con tu estilo anterior (Tailwind red-500)
+                confirmButtonText: 'Entendido'
+            });
+        }
+        /*]]>*/
+    </script>
+    <!-- Thymeleaf reemplazará este fragmento con el bloque que envíe la página hija -->
+    <th:block th:replace="${contenido}"></th:block>
+</main>
+
+<!-- ========================================== -->
+<!-- FOOTER: Pie de página institucional        -->
+<!-- ========================================== -->
+<footer class="bg-white border-t border-gray-200 mt-auto py-4 px-6 text-center text-xs text-gray-400 font-medium">
+    <div>© 2026 UAFE - Unidad de Análisis Financiero y Económico. Todos los derechos reservados.</div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Thymeleaf convierte el DTO de Java en un objeto JSON nativo de JavaScript de forma segura
+        const alerta = /*[[${alertaNotificacion}]]*/ null;
+
+        if (alerta) {
+            Swal.fire({
+                icon: alerta.tipo,              // 'success', 'error', 'warning', 'info'
+                title: alerta.titulo,
+                text: alerta.mensaje,           // Inserta texto plano (Protección XSS nativa)
+                timer: alerta.tiempo,           // Si es null, no se cierra automáticamente
+                timerProgressBar: alerta.tiempo ? true : false, // Muestra la barra si tiene tiempo
+                confirmButtonColor: alerta.colorBoton,
+                confirmButtonText: 'Entendido'
+            });
+        }
+        /*]]>*/
+    </script>
+</footer>
+
+</body>
+</html>

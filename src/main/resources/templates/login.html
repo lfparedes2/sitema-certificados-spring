@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Corporativo</title>
+    <!-- Tailwind CSS -->
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <script th:src="@{/js/func_ex.js}"></script>
+    <!-- API de Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<!-- Fondo adaptado con imagen liviana corporativa usando clases de Tailwind -->
+<body class="bg-[url('https://plus.unsplash.com/premium_photo-1681487178876-a1156952ec60?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D')] bg-cover bg-center bg-no-repeat bg-fixed h-screen flex flex-col justify-center items-center font-sans antialiased m-0 p-0 px-4">
+
+<!-- MENÚ SUPERIOR ADAPTADO CON TAILWIND -->
+
+<nav class="bg-white px-6 md:px-8 py-3.5 flex justify-between items-center shadow-md shadow-slate-100 border-b border-slate-100 fixed top-0 w-full z-50">
+    <!-- Bloque de Identidad (Logo + Texto) -->
+    <a href="#" class="flex items-center gap-3 group no-underline z-50">
+        <div class="h-9 w-9 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
+            <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        </div>
+        <span class="font-extrabold text-slate-800 tracking-wider text-base group-hover:text-blue-600 transition-colors duration-300">EMPRESA</span>
+    </a>
+
+    <!-- Botón de Hamburguesa (Solo visible en Móviles) -->
+    <button id="menu-btn" class="md:hidden text-slate-600 hover:text-blue-600 p-2 rounded-xl hover:bg-slate-50 transition-colors focus:outline-none z-50" aria-label="Abrir menú">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Menú de Navegación (Escritorio + Móvil Desplegable) -->
+    <ul id="menu-list" class="
+        /* Estilos para Escritorio */
+        md:flex md:flex-row md:static md:w-auto md:bg-transparent md:shadow-none md:p-0 md:gap-1.5
+        /* Estilos para Móvil (Oculto por defecto con hidden) */
+        hidden absolute top-0 left-0 w-full bg-white shadow-xl border-b border-slate-100 p-6 pt-20 flex-col gap-3 list-none m-0 transition-all duration-300 ease-in-out
+    ">
+        <!-- Enlace: Inicio -->
+        <li class="w-full md:w-auto">
+            <a th:href="@{/auth/login}" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-blue-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Inicio</span>
+            </a>
+        </li>
+
+        <!-- Enlace: Registrarse -->
+        <li class="w-full md:w-auto">
+            <a th:href="@{/auth/register}" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-emerald-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-emerald-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+                <span>Registrarse</span>
+            </a>
+        </li>
+
+        <!-- Enlace: Recuperar Contraseña -->
+        <li class="w-full md:w-auto">
+            <a href="#" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-amber-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-amber-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                </svg>
+                <span>Recuperar Contraseña</span>
+            </a>
+        </li>
+
+        <!-- Enlace: Verificar Certificado -->
+        <li class="w-full md:w-auto">
+            <a href="#" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-cyan-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-cyan-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>Verificar Certificado</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div
+        class="bg-white/50 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-100 mt-16 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer""
+        onmouseenter="
+            this.classList.add('animate__animated', 'animate__pulse', 'animate__fast');
+            this.style.animationPlayState = 'running';
+            this.hoverTimer = setTimeout(() => { this.style.animationPlayState = 'paused'; }, 250);
+        "
+        onmouseleave="
+            clearTimeout(this.hoverTimer);
+            this.style.animationPlayState = 'running';
+            this.classList.remove('animate__animated', 'animate__pulse', 'animate__fast');
+        }">
+
+    <!-- Encabezado -->
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-black tracking-tight text-slate-900 mb-2">Iniciar Sesión</h2>
+        <p class="text-sm text-slate-500">Ingresa tus credenciales corporativas</p>
+    </div>
+<div class="text-center text-xs text-slate-500 border-t border-slate-100 pt-6">
+</div>
+    <!-- Alertas de Thymeleaf -->
+    <div th:if="${param.error}" class="bg-red-50 text-red-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-red-200 flex items-center gap-2 animate-pulse">
+        <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Credenciales incorrectas o usuario inactivo.</span>
+    </div>
+
+<!-- Alerta: Contraseña Caducada -->
+<div th:if="${param.expired}" class="bg-amber-50 text-amber-700 p-3.5 rounded-xl mb-5 text-sm font-medium border border-amber-200 flex flex-col gap-1.5 shadow-sm">
+    <div class="flex items-center gap-2">
+        <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        <span class="font-bold">Tu contraseña ha caducado.</span>
+    </div>
+    <p class="text-xs text-amber-600 pl-7">Por motivos de seguridad debes actualizar tus credenciales para poder ingresar.
+        <a href="/auth/recuperar" class="underline font-bold text-amber-700 hover:text-amber-800 transition-colors">Restablecer contraseña aquí</a>.
+    </p>
+</div>
+
+<!-- Alerta: Error general (Usuario/Clave incorrectos) -->
+<div th:if="${param.error}" class="bg-rose-50 text-rose-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-rose-200 flex items-center gap-2 shadow-sm">
+    <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span>Usuario o contraseña incorrectos. Por favor, vuelve a intentarlo.</span>
+</div>
+
+<!-- Alerta de logout existente -->
+<div th:if="${param.logout}" class="bg-emerald-50 text-emerald-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-emerald-200 flex items-center gap-2">
+    <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+    <span>Sesión destruida de forma segura.</span>
+</div>
+
+    <!-- Formulario -->
+    <form th:action="@{/auth/login}" method="POST" class="space-y-6" id="loginForm" novalidate>
+
+        <!-- Campo Usuario -->
+        <div class="relative group">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Usuario</label>
+            <div class="relative">
+                <input type="text" id="username" name="username" required class="block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium" minlength="5" placeholder="Ej. Usuario123"/>
+
+            </div>
+            <p id="username-error" class="text-xs text-red-500 mt-1.5 font-medium hidden"></p>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="relative group">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Contraseña</label>
+            <div class="relative">
+                <input type="password" id="password" name="password" required class="block w-full px-4 py-3 pr-12 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium" minlength="5" placeholder="••••••••"/>
+                <!-- Botón del Ojo -->
+                <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-indigo-600 transition-colors focus:outline-none">
+                    <svg id="eye-open" xmlns="http://w3.org" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <svg id="eye-closed" xmlns="http://w3.org" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.025 10.025 0 014.132-5.4M9.9 4.25a6.23 6.23 0 012.1-.25c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.4M15.4 15.4l-6.8-6.8M3 3l18 18" />
+                    </svg>
+                </button>
+            </div>
+            <p id="password-error" class="text-xs text-red-500 mt-1.5 font-medium hidden"></p>
+        </div>
+
+        <!-- Contenedor del reCAPTCHA -->
+        <div class="flex flex-col items-center justify-center p-2 ">
+            <div class="g-recaptcha" data-sitekey="6LfclFwUAAAAANapD-yExHjaDlbDGc4u-d4AMZcB"></div>
+            <p id="recaptcha-error" class="text-xs text-red-500 mt-2 font-medium hidden">Por favor, completa la verificación de seguridad.</p>
+        </div>
+
+        <!-- Botón de Envío -->
+        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:bg-blue-700 active:scale-[0.98] shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 transition-all duration-200 text-sm tracking-wide">
+            Ingresar
+        </button>
+
+    </form>
+
+    <!-- Pie de página -->
+    <!--<div class="mt-8 text-center text-xs text-slate-500 border-t border-slate-100 pt-6">
+        ¿No tienes cuenta corporativa?
+        <a th:href="@{/auth/register}" class="text-indigo-600 font-bold hover:text-indigo-700 hover:underline ml-1">Registrarse aquí</a>
+    </div>-->
+
+</body>
+</html>

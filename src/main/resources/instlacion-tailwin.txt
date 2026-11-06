@@ -1,0 +1,45 @@
+mi-proyecto-springboot/
+├── src/
+│   ├── main/
+│   │   ├── java/            <-- Tu código Java (Controllers, etc.)
+│   │   └── resources/
+│   │       ├── frontend/    <-- 🛠️ AQUÍ CREAS TU ARCHIVO DE ENTRADA
+│   │       │   └── input.css
+│   │       │
+│   │       ├── static/      <-- 🚀 AQUÍ SE GENERARÁ EL ARCHIVO FINAL (PRODUCCIÓN)
+│   │       │   └── css/
+│   │       │       └── output.css <-- (Se crea solo al compilar)
+│   │       │
+│   │       └── templates/   <-- Tus vistas HTML (Thymeleaf, JTE, etc.)
+│   │           └── index.html
+├── package.json
+└── pom.xml
+
+
+
+Configuración rápida para Tailwind v4 en Spring Boot
+
+Para que Tailwind v4 funcione correctamente con esta estructura, ajusta estos dos puntos:
+
+1. Abre tu src/main/resources/frontend/input.css
+
+Como en la versión 4 ya no existe el archivo tailwind.config.js, debes decirle a Tailwind dónde buscar tus archivos HTML usando la nueva directiva @source directamente en el CSS:
+css
+@import "tailwindcss";
+
+/* Le dice a Tailwind que escanee tus archivos HTML de Thymeleaf */
+@source "../templates/**/*.html";
+
+
+2. Lanza el comando de compilación (CLI)
+
+Ajustando las rutas a la estructura de Spring Boot, tu comando para desarrollo en la terminal raíz del proyecto será:
+bash
+npx @tailwindcss/cli -i ./src/main/resources/frontend/input.css -o ./src/main/resources/static/css/output.css --watch
+Usa el código con precaución.
+
+3. Enlázalo en tu HTML (Thymeleaf)
+
+En tus vistas (dentro de templates/), enlaza únicamente el archivo procesado de la carpeta static:
+html
+<link th:href="@{/css/output.css}" rel="stylesheet">

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Corporativo</title>
+    <!-- Tailwind CSS -->
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <script th:src="@{/js/func_ex.js}"></script>
+    <!-- API de Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<!-- Fondo adaptado con imagen liviana corporativa usando clases de Tailwind -->
+<body class="bg-[url('https://plus.unsplash.com/premium_photo-1681487178876-a1156952ec60?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D')] bg-cover bg-center bg-no-repeat bg-fixed h-screen flex flex-col justify-center items-center font-sans antialiased m-0 p-0 px-4">
+
+<!-- MENÚ SUPERIOR ADAPTADO CON TAILWIND -->
+
+<nav class="bg-white px-6 md:px-8 py-3.5 flex justify-between items-center shadow-md shadow-slate-100 border-b border-slate-100 fixed top-0 w-full z-50">
+    <!-- Bloque de Identidad (Logo + Texto) -->
+    <a href="#" class="flex items-center gap-3 group no-underline z-50">
+        <div class="h-9 w-9 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
+            <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        </div>
+        <span class="font-extrabold text-slate-800 tracking-wider text-base group-hover:text-blue-600 transition-colors duration-300">EMPRESA</span>
+    </a>
+
+    <!-- Botón de Hamburguesa (Solo visible en Móviles) -->
+    <button id="menu-btn" class="md:hidden text-slate-600 hover:text-blue-600 p-2 rounded-xl hover:bg-slate-50 transition-colors focus:outline-none z-50" aria-label="Abrir menú">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Menú de Navegación (Escritorio + Móvil Desplegable) -->
+    <ul id="menu-list" class="
+        /* Estilos para Escritorio */
+        md:flex md:flex-row md:static md:w-auto md:bg-transparent md:shadow-none md:p-0 md:gap-1.5
+        /* Estilos para Móvil (Oculto por defecto con hidden) */
+        hidden absolute top-0 left-0 w-full bg-white shadow-xl border-b border-slate-100 p-6 pt-20 flex-col gap-3 list-none m-0 transition-all duration-300 ease-in-out
+    ">
+        <!-- Enlace: Inicio -->
+        <li class="w-full md:w-auto">
+            <a th:href="@{/auth/login}" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-blue-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Inicio</span>
+            </a>
+        </li>
+
+        <!-- Enlace: Registrarse -->
+        <li class="w-full md:w-auto">
+            <a th:href="@{/auth/register}" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-emerald-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-emerald-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+                <span>Registrarse</span>
+            </a>
+        </li>
+
+        <!-- Enlace: Recuperar Contraseña -->
+        <li class="w-full md:w-auto">
+            <a href="#" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-amber-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-amber-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                </svg>
+                <span>Recuperar Contraseña</span>
+            </a>
+        </li>
+
+        <!-- Enlace: Verificar Certificado -->
+        <li class="w-full md:w-auto">
+            <a href="#" class="group flex items-center gap-2.5 px-4 py-2.5 md:py-2 rounded-xl text-slate-600 hover:text-cyan-600 font-semibold text-sm transition-all duration-300 ease-out hover:bg-slate-50 active:scale-95">
+                <svg class="h-4 w-4 text-slate-400 group-hover:text-cyan-500 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>Verificar Certificado</span>
+            </a>
+        </li>
+    </ul>
+
+</nav>
+
+
+
+<div class="bg-white/70 backdrop-blur-md p-8 rounded-xl shadow-2xl w-full max-w-2xl">
+    <h2 class="text-3xl font-extrabold text-center text-slate-800 mb-6">Registro de Usuarios</h2>
+
+    <div th:if="${error}" class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm border border-red-200" th:text="${error}"></div>
+
+
+    <!-- Formulario con enlace explícito al DTO y generación automática de token CSRF -->
+    <form th:action="@{/auth/register}" th:object="${usuario}" method="POST" class="grid grid-cols-1 gap-4">
+
+        <div>
+            <label class="block text-sm font-semibold text-slate-700">Nombre Completo</label>
+            <input type="text" th:field="*{nombre}" required
+                   class="mt-1 block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700">Username</label>
+                <input type="text" th:field="*{username}" required
+                       class="mt-1 block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700">Cédula / ID</label>
+                <input type="text" th:field="*{cedula}" required
+                       class="mt-1 block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold text-slate-700">Email Corporativo</label>
+            <input type="email" th:field="*{email}" required
+                   class="mt-1 block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-slate-700">Tipo de Usuario</label>
+            <select th:field="*{tipo}" required
+                    class="mt-1 block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium">
+                <option value="INTERNO">Funcionario Interno</option>
+                <option value="EXTERNO">Usuario Externo</option>
+            </select>
+        </div>
+
+
+        <div>
+            <label class="block text-sm font-semibold text-slate-700">Contraseña</label>
+            <!-- IMPORTANTE: name/field debe apuntar al atributo contrasenia mapeado en el DTO -->
+            <input type="password" th:field="*{contrasenia}" required
+                   class="mt-1 block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 shadow-lg mt-2 transition">
+            Registrar Cuenta
+        </button>
+    </form>
+
+
+    <div class="mt-4 text-center text-sm text-slate-600">
+        ¿Ya eres miembro? <a th:href="@{/auth/login}" class="text-indigo-600 font-bold hover:underline">Volver al Login</a>
+    </div>
+</div>
+
+
+</body>
+</html>

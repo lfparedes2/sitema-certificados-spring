@@ -1,0 +1,50 @@
+### IntelliJ IDEA ###
+.idea/
+node_modules/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Spring Boot & Java (Generales) ###
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+pom.xml.note
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.flattened-pom.xml
+
+### Gradle ###
+.gradle/
+build/
+!gradle-wrapper.jar
+.gradle-taskname-cache
+
+### Sistema Operativo (Basura) ###
+.DS_Store
+Thumbs.db
+
+### Configuración Local (¡Seguridad!) ###
+.env
+.env.local
+application-local.properties
+application-local.yml

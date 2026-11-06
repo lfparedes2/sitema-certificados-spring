@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Excepcion del Sistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 flex items-center justify-center h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg border border-slate-200 text-center">
+        <div class="text-7xl font-black text-indigo-600 mb-2" th:text="${status}">500</div>
+        <h2 class="text-2xl font-extrabold text-slate-800 mb-4" th:text="${title}">Error Interno</h2>
+        <p class="text-slate-600 text-sm md:text-base leading-relaxed mb-6" th:text="${message}">
+            Descripcion segura del error interceptado globalmente.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <a th:href="@{/dashboard}" class="bg-indigo-600 text-white font-bold py-2.5 px-6 rounded-lg hover:bg-indigo-700 shadow-md transition text-sm">
+                Volver al Panel Seguro
+            </a>
+            <a th:href="@{/auth/login}" class="bg-slate-100 text-slate-700 font-bold py-2.5 px-6 rounded-lg hover:bg-slate-200 transition text-sm">
+                Ir al Login principal
+            </a>
+        </div>
+    </div>
+</body>
+</html>
