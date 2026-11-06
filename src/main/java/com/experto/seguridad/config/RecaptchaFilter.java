@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -15,9 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
+@Component // <-- AGREGADO: Permite que Spring maneje este filtro como un Bean
 public class RecaptchaFilter extends OncePerRequestFilter {
 
-    // REEMPLAZA ESTO con tu clave secreta de Google reCAPTCHA (Empieza por 6L...)
+    // Nota: Es una buena práctica en el futuro mover esto a tu application.properties usando @Value("${google.recaptcha.secret}")
     private static final String RECAPTCHA_SECRET = "6LfclFwUAAAAAAX57E87Hl2tTyeywHy97462fM1W";
     private static final String RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
 
@@ -29,11 +31,11 @@ public class RecaptchaFilter extends OncePerRequestFilter {
         if ("/auth/login".equals(request.getRequestURI()) && "POST".equalsIgnoreCase(request.getMethod())) {
             String recaptchaResponse = request.getParameter("g-recaptcha-response");
 
-            if (recaptchaResponse == null || !verifyRecaptcha(recaptchaResponse)) {
+            if (recaptchaResponse == null || recaptchaResponse.trim().isEmpty() || !verifyRecaptcha(recaptchaResponse)) {
                 System.out.println("[DIAGNÓSTICO ERRORES] reCAPTCHA no válido o vacío.");
-                // Redirigir de vuelta al login agregando el parámetro de error para Thymeleaf
-                response.sendRedirect("/auth/login?error=true");
-                return; // Corta el flujo, no permite continuar hacia el proceso de login
+
+                response.sendRedirect("/auth/login?recaptchaError=true");
+                return; // Corta el flujo
             }
             System.out.println("[DIAGNÓSTICO] reCAPTCHA verificado con éxito del lado del servidor.");
         }
@@ -66,7 +68,7 @@ public class RecaptchaFilter extends OncePerRequestFilter {
 
             // 4. Evaluar la respuesta en formato JSON estructurado
             Map<String, Object> apiResponse = responseEntity.getBody();
-            if (apiResponse != null) {
+            if (apiResponse != null && apiResponse.containsKey("success")) {
                 return (Boolean) apiResponse.get("success");
             }
         } catch (Exception e) {

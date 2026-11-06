@@ -13,14 +13,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter; // <-- IMPORTANTE
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, UsuarioService usuarioService) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            UsuarioService usuarioService,
+            RecaptchaFilter recaptchaFilter // Inyectado para que Spring maneje sus dependencias internamente
+    ) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -28,13 +32,14 @@ public class SecurityConfig {
                         .requestMatchers("/dashboard/**").authenticated()
                         .anyRequest().authenticated()
                 )
-                // AGREGADO: Ejecutar el validador del reCAPTCHA antes del filtro de login nativo
-                .addFilterBefore(new RecaptchaFilter(), UsernamePasswordAuthenticationFilter.class)
+                // Ejecutar el validador del reCAPTCHA antes del filtro de login nativo
+                .addFilterBefore(recaptchaFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
                         .successHandler(customAuthenticationSuccessHandler(usuarioService))
+                        .failureHandler(customAuthenticationFailureHandler()) // <-- CORREGIDO: Faltaba registrarlo aquí
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -57,10 +62,8 @@ public class SecurityConfig {
         return (request, response, exception) -> {
             // Verificamos si el fallo se debe a que las credenciales caducaron
             if (exception instanceof org.springframework.security.authentication.CredentialsExpiredException) {
-                // Redirige al usuario a una vista especial para actualizar su contraseña
                 response.sendRedirect("/auth/login?expired=true");
             } else {
-                // Cualquier otro error (usuario/clave incorrecta, cuenta bloqueada, etc.)
                 response.sendRedirect("/auth/login?error=true");
             }
         };
