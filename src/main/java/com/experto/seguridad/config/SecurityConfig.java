@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,10 +24,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             UsuarioService usuarioService,
-            RecaptchaFilter recaptchaFilter // Inyectado para que Spring maneje sus dependencias internamente
+            RecaptchaFilter recaptchaFilter
     ) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                // CAMBIO 1 (OWASP): Eliminamos .csrf(csrf -> csrf.disable()) para activar la protección nativa.
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/css/**", "/js/**", "/assets/**", "/vite.svg").permitAll()
                         .requestMatchers("/dashboard/**").authenticated()
@@ -39,7 +41,8 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
                         .successHandler(customAuthenticationSuccessHandler(usuarioService))
-                        .failureHandler(customAuthenticationFailureHandler()) // <-- CORREGIDO: Faltaba registrarlo aquí
+                        // CAMBIO 2: Registramos el manejador de fallos que lee la caducidad
+                        .failureHandler(customAuthenticationFailureHandler())
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -57,11 +60,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // CAMBIO 3: Creamos el Bean que atrapa el error de expiración y redirige a la vista
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
         return (request, response, exception) -> {
-            // Verificamos si el fallo se debe a que las credenciales caducaron
-            if (exception instanceof org.springframework.security.authentication.CredentialsExpiredException) {
+            if (exception instanceof CredentialsExpiredException) {
                 response.sendRedirect("/auth/login?expired=true");
             } else {
                 response.sendRedirect("/auth/login?error=true");

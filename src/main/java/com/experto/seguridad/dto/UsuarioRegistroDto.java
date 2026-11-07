@@ -13,17 +13,17 @@ public record UsuarioRegistroDto(
     @NotBlank(message = "El nombre completo es obligatorio") @Size(max = 100) String nombre,
     @NotBlank(message = "El tipo de usuario es obligatorio") String tipo,
 
-    @NotNull(message = "La fecha de creación es obligatoria")
-    @PastOrPresent(message = "La fecha de creación no puede ser futura")
+    /*@NotNull(message = "La fecha de creación es obligatoria")
+    @PastOrPresent(message = "La fecha de creación no puede ser futura")*/
     LocalDate fechaCreacion,
 
-    @NotNull(message = "La fecha de caducidad del password es obligatoria")
-    @Future(message = "La fecha de caducidad del password debe ser una fecha futura")
+    /*@NotNull(message = "La fecha de caducidad del password es obligatoria")
+    @Future(message = "La fecha de caducidad del password debe ser una fecha futura")*/
     ZonedDateTime fechaCaducaPasword,
 
-    @NotNull(message = "El código de verificación es obligatorio")
+    /*@NotNull(message = "El código de verificación es obligatorio")
     @Min(value = 100000, message = "El código debe tener 4 dígitos")
-    @Max(value = 999999, message = "El código no puede tener más de 4 dígitos")
+    @Max(value = 999999, message = "El código no puede tener más de 4 dígitos")*/
     Integer codeVerifica
 
 ) {}

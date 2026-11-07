@@ -39,3 +39,11 @@ spring:
 logging:
   level:
     org.springframework.security: INFO
+
+# ==========================================
+# CONFIGURACIÓN DE SEGURIDAD CUSTOM
+# ==========================================
+seguridad:
+  password:
+    # Cambia a 'false' para apagar la validación de caducidad en caliente (sin recompilar)
+    validar-caducidad: false

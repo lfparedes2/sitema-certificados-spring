@@ -61,19 +61,26 @@ public class UsuarioService {
                 .filter(m -> "ACTIVO".equalsIgnoreCase(m.getMenuEstado()))
                 .distinct()
                 .map(m -> new UsuarioSessionDto.MenuInfo(
-                        m.getIdMenu(),                                                   // 1. idMenu (Nuevo)
+                        m.getIdMenu(),                                                   // 1. idMenu
                         m.getMenuEtiqueta(),
                         m.getMenuAccion(),
                         m.getMenuImg(),
                         m.getMenuOrden(),
-                        m.getMenuPadre() != null ? m.getMenuPadre().getIdMenu() : null   // 2. idMenuPadre (Nuevo)
+                        m.getMenuPadre() != null ? m.getMenuPadre().getIdMenu() : null   // 2. idMenuPadre
                 ))
                 .sorted((m1, m2) -> Integer.compare(m1.orden() != null ? m1.orden() : 0, m2.orden() != null ? m2.orden() : 0))
                 .toList();
 
         return new UsuarioSessionDto(
-                usuario.getIdUsuario(), usuario.getUsuarioUsername(), usuario.getUsuarioNombre(),
-                usuario.getUsuarioEmail(), usuario.getUsuarioCedula(), usuario.getUsuarioTipo(), roles, menus
+                usuario.getIdUsuario(),
+                usuario.getUsuarioUsername(),
+                usuario.getUsuarioNombre(),
+                usuario.getUsuarioEmail(),
+                usuario.getUsuarioCedula(),
+                usuario.getUsuarioTipo(),
+                usuario.getFechaCaducidaPasaporte(), // <--- ¡Añadido aquí (parámetro 7)!
+                roles,
+                menus
         );
     }
 
