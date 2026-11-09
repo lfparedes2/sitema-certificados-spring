@@ -46,4 +46,7 @@ logging:
 seguridad:
   password:
     # Cambia a 'false' para apagar la validación de caducidad en caliente (sin recompilar)
-    validar-caducidad: false
+    validar-caducidad: true
+  2fa:
+    # Cambia a 'false' para deshabilitar el código de 4 dígitos
+    habilitado: true

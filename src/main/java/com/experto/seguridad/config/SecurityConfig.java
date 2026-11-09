@@ -20,28 +20,31 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAuthenticationSuccessHandler successHandler;
+
+    // Inyectamos el nuevo manejador de éxito
+    public SecurityConfig(CustomAuthenticationSuccessHandler successHandler) {
+        this.successHandler = successHandler;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            UsuarioService usuarioService,
             RecaptchaFilter recaptchaFilter
     ) throws Exception {
         http
-                // CAMBIO 1 (OWASP): Eliminamos .csrf(csrf -> csrf.disable()) para activar la protección nativa.
-
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/css/**", "/js/**", "/assets/**", "/vite.svg").permitAll()
                         .requestMatchers("/dashboard/**").authenticated()
                         .anyRequest().authenticated()
                 )
-                // Ejecutar el validador del reCAPTCHA antes del filtro de login nativo
                 .addFilterBefore(recaptchaFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .successHandler(customAuthenticationSuccessHandler(usuarioService))
-                        // CAMBIO 2: Registramos el manejador de fallos que lee la caducidad
+                        // Usamos el manejador inyectado
+                        .successHandler(successHandler)
                         .failureHandler(customAuthenticationFailureHandler())
                         .permitAll()
                 )
@@ -60,25 +63,14 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // CAMBIO 3: Creamos el Bean que atrapa el error de expiración y redirige a la vista
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
         return (request, response, exception) -> {
-            if (exception instanceof CredentialsExpiredException) {
+            if (exception instanceof org.springframework.security.authentication.CredentialsExpiredException) {
                 response.sendRedirect("/auth/login?expired=true");
             } else {
                 response.sendRedirect("/auth/login?error=true");
             }
-        };
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler customAuthenticationSuccessHandler(UsuarioService usuarioService) {
-        return (request, response, authentication) -> {
-            HttpSession session = request.getSession();
-            var dto = usuarioService.obtenerDatosSesion(authentication.getName());
-            session.setAttribute("USER_SESSION", dto);
-            response.sendRedirect("/dashboard");
         };
     }
 

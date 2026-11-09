@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación en dos pasos</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+<body class="bg-[url('https://plus.unsplash.com/premium_photo-1681487178876-a1156952ec60?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D')] bg-cover bg-center bg-no-repeat bg-fixed h-screen flex flex-col justify-center items-center font-sans antialiased px-4">
+
+<!-- Contenedor ajustado con p-6 en móviles y p-8 en pc -->
+<div class="bg-white/50 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-slate-100">
+    <div class="text-center mb-6">
+        <h2 class="text-2xl font-black tracking-tight text-slate-900 mb-2">Código de Seguridad</h2>
+        <p class="text-sm text-slate-800 font-medium">Revisa la consola (o tu correo) e ingresa el código de 4 dígitos enviado.</p>
+
+        <!-- NUEVO: Temporizador visual -->
+        <p class="text-xs text-slate-500 font-bold mt-2">
+            Expira en <span id="temporizador" class="text-indigo-600 tracking-wide">05:00</span>
+        </p>
+    </div>
+
+    <!-- Alertas (Errores de intentos) -->
+    <div th:if="${error2fa}" class="bg-red-50 text-red-600 p-3 rounded-xl mb-5 text-sm font-medium border border-red-200 text-center shadow-sm">
+        <span th:text="${error2fa}"></span>
+    </div>
+
+    <!-- Formulario 2FA -->
+    <form th:action="@{/auth/verify-2fa}" method="POST" id="form-2fa" class="space-y-6">
+        <!-- Token CSRF -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <!-- Input oculto que envía el código al backend -->
+        <input type="hidden" name="codigo" id="codigo-final" required />
+
+        <!-- Contenedor de los 4 cuadros -->
+        <div class="flex justify-center gap-2 sm:gap-4" id="otp-container">
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 sm:w-14 sm:h-16 md:w-16 md:h-16 text-center text-2xl sm:text-3xl font-black border-2 border-white rounded-xl bg-white/80 text-indigo-700 focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/20 outline-none transition-all shadow-sm" autocomplete="off" autofocus />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 sm:w-14 sm:h-16 md:w-16 md:h-16 text-center text-2xl sm:text-3xl font-black border-2 border-white rounded-xl bg-white/80 text-indigo-700 focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/20 outline-none transition-all shadow-sm" autocomplete="off" />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 sm:w-14 sm:h-16 md:w-16 md:h-16 text-center text-2xl sm:text-3xl font-black border-2 border-white rounded-xl bg-white/80 text-indigo-700 focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/20 outline-none transition-all shadow-sm" autocomplete="off" />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-12 h-14 sm:w-14 sm:h-16 md:w-16 md:h-16 text-center text-2xl sm:text-3xl font-black border-2 border-white rounded-xl bg-white/80 text-indigo-700 focus:bg-white focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/20 outline-none transition-all shadow-sm" autocomplete="off" />
+        </div>
+
+        <button type="submit" id="btn-submit" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 transition-all duration-200">
+            Verificar e Ingresar
+        </button>
+
+        <!-- Enlace para regresar al Login con LÍNEA BLANCA -->
+        <div class="text-center mt-6 border-t-2 border-white pt-4">
+            <a th:href="@{/auth/login}" class="text-sm font-bold text-slate-700 hover:text-indigo-700 transition-colors flex items-center justify-center gap-1.5 group">
+                <svg xmlns="http://w3.org" class="h-4 w-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Regresar al login
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Script de comportamiento -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- NUEVO: Lógica del temporizador (5 minutos = 300 segundos) ---
+        let tiempoRestante = 300;
+        const displayTiempo = document.getElementById('temporizador');
+
+        const intervalo = setInterval(() => {
+            tiempoRestante--;
+            if (tiempoRestante <= 0) {
+                clearInterval(intervalo);
+                displayTiempo.textContent = "00:00";
+                displayTiempo.classList.replace('text-indigo-600', 'text-red-600'); // Se pone rojo al terminar
+            } else {
+                let m = Math.floor(tiempoRestante / 60);
+                let s = tiempoRestante % 60;
+                displayTiempo.textContent =
+                    (m < 10 ? "0" + m : m) + ":" +
+                    (s < 10 ? "0" + s : s);
+            }
+        }, 1000);
+        // ----------------------------------------------------------------
+
+        const inputs = document.querySelectorAll('.otp-input');
+        const form = document.getElementById('form-2fa');
+        const hiddenInput = document.getElementById('codigo-final');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                input.value = input.value.replace(/[^0-9]/g, '');
+                if (input.value !== '' && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, inputs.length);
+                if (pastedData) {
+                    [...pastedData].forEach((char, i) => {
+                        inputs[i].value = char;
+                        if (i < inputs.length - 1) inputs[i + 1].focus();
+                    });
+                }
+            });
+        });
+
+        form.addEventListener('submit', (e) => {
+            let codigoCompleto = '';
+            inputs.forEach(input => codigoCompleto += input.value);
+
+            if (codigoCompleto.length === 4) {
+                hiddenInput.value = codigoCompleto;
+            } else {
+                e.preventDefault();
+                alert('Por favor, ingresa los 4 dígitos completos.');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
