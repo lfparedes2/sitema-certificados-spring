@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Login Corporativo</title>
     <!-- Tailwind CSS -->
+    <link rel="icon"  th:href="@{/images/favico.png}">
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <script th:src="@{/js/func_ex.js}"></script>
     <!-- API de Google reCAPTCHA -->
@@ -99,8 +100,7 @@
         <h2 class="text-3xl font-black tracking-tight text-slate-900 mb-2">Iniciar Sesión</h2>
         <p class="text-sm text-slate-500">Ingresa tus credenciales corporativas</p>
     </div>
-<div class="text-center text-xs text-slate-500 border-t border-slate-100 pt-6">
-</div>
+
 
     <!-- Alertas de Thymeleaf -->
     <div th:if="${param.error}" class="bg-red-50 text-red-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-red-200 flex items-center gap-2 animate-pulse">
@@ -130,50 +130,60 @@
     <span>Sesión destruida de forma segura.</span>
 </div>
 
-    <!-- Formulario -->
-    <form th:action="@{/auth/login}" method="POST" class="space-y-6" id="loginForm" novalidate>
+<form th:action="@{/auth/login}" method="POST" class="space-y-6" id="loginForm" novalidate>
 
-        <!-- Campo Usuario -->
-        <div class="relative group">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Usuario</label>
-            <div class="relative">
-                <input type="text" id="username" name="username" required class="block w-full px-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium" minlength="5" placeholder="Ej. Usuario123"/>
-
+    <!-- Campo Usuario -->
+    <div class="relative group">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Usuario</label>
+        <div class="relative flex items-center">
+            <!-- Icono de Usuario (Izquierda absoluto) -->
+            <div class="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                <svg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://w3.org " fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
             </div>
-            <p id="username-error" class="text-xs text-red-500 mt-1.5 font-medium hidden"></p>
+            <input type="text" id="username" name="username" required class="block w-full pl-11 pr-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium" minlength="5" placeholder="Ej. Usuario123"/>
         </div>
+        <p id="username-error" class="text-xs text-red-500 mt-1.5 font-medium hidden"></p>
+    </div>
 
-        <!-- Campo Contraseña -->
-        <div class="relative group">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Contraseña</label>
-            <div class="relative">
-                <input type="password" id="password" name="password" required class="block w-full px-4 py-3 pr-12 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium" minlength="5" placeholder="••••••••"/>
-                <!-- Botón del Ojo -->
-                <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-indigo-600 transition-colors focus:outline-none">
-                    <svg id="eye-open" xmlns="http://w3.org" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    <svg id="eye-closed" xmlns="http://w3.org" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.025 10.025 0 014.132-5.4M9.9 4.25a6.23 6.23 0 012.1-.25c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.4M15.4 15.4l-6.8-6.8M3 3l18 18" />
-                    </svg>
-                </button>
+    <!-- Campo Contraseña -->
+    <div class="relative group">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5 transition-colors group-focus-within:text-indigo-600">Contraseña</label>
+        <div class="relative flex items-center">
+            <!-- Icono de Candado (Izquierda absoluto) -->
+            <div class="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                <svg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://w3.org " fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
             </div>
-            <p id="password-error" class="text-xs text-red-500 mt-1.5 font-medium hidden"></p>
+            <input type="password" id="password" name="password" required class="block w-full pl-11 pr-12 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium" minlength="5" placeholder="••••••••"/>
+            <!-- Botón del Ojo (Derecha absoluto) -->
+            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex items-center text-slate-400 hover:text-indigo-600 transition-colors focus:outline-none">
+                <svg id="eye-open" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://w3.org " class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <svg id="eye-closed" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://w3.org " class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.025 10.025 0 014.132-5.4M9.9 4.25a6.23 6.23 0 012.1-.25c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.4M15.4 15.4l-6.8-6.8M3 3l18 18" />
+                </svg>
+            </button>
         </div>
+        <p id="password-error" class="text-xs text-red-500 mt-1.5 font-medium hidden"></p>
+    </div>
 
-        <!-- Contenedor del reCAPTCHA -->
-        <div class="flex flex-col items-center justify-center p-2 ">
-            <div class="g-recaptcha" data-sitekey="6LfclFwUAAAAANapD-yExHjaDlbDGc4u-d4AMZcB"></div>
-            <p id="recaptcha-error" class="text-xs text-red-500 mt-2 font-medium hidden">Por favor, completa la verificación de seguridad.</p>
-        </div>
+    <!-- Contenedor del reCAPTCHA -->
+    <div class="flex flex-col items-center justify-center p-2 ">
+        <div class="g-recaptcha" data-sitekey="6LfclFwUAAAAANapD-yExHjaDlbDGc4u-d4AMZcB"></div>
+        <p id="recaptcha-error" class="text-xs text-red-500 mt-2 font-medium hidden">Por favor, completa la verificación de seguridad.</p>
+    </div>
 
-        <!-- Botón de Envío -->
-        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:bg-blue-700 active:scale-[0.98] shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 transition-all duration-200 text-sm tracking-wide">
-            Ingresar
-        </button>
+    <!-- Botón de Envío -->
+    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:bg-blue-700 active:scale- shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 transition-all duration-200 text-sm tracking-wide">
+        Ingresar
+    </button>
 
-    </form>
+</form>
 
     <!-- Pie de página -->
     <!--<div class="mt-8 text-center text-xs text-slate-500 border-t border-slate-100 pt-6">
