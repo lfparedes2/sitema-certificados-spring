@@ -35,6 +35,21 @@ spring:
         default_schema: seguridad
         # Crea el esquema automáticamente en Postgres si no existe
         javax.persistence.create-database-schemas: true
+  mail:
+    host: ://tudominio.com
+    port: 587
+    username: MAIL_USERNAME
+    password: MAIL_PASSWORD
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 logging:
   level:
