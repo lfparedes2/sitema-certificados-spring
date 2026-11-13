@@ -17,13 +17,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
-@Component // <-- AGREGADO: Permite que Spring maneje este filtro como un Bean
+@Component
 public class RecaptchaFilter extends OncePerRequestFilter {
 
+/*
     private static final String RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
+*/
 
     @Value("${google.recaptcha.secret}")
     private String recaptchaSecret;
+
+    @Value("${google.recaptcha.verify.url}")
+    private String recaptchaVerifyUrl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -63,7 +68,7 @@ public class RecaptchaFilter extends OncePerRequestFilter {
 
             // 3. Realizar la petición POST de forma segura
             ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
-                    RECAPTCHA_VERIFY_URL,
+                    recaptchaVerifyUrl,
                     requestEntity,
                     Map.class
             );

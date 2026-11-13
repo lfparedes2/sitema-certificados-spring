@@ -72,3 +72,5 @@ google:
   recaptcha:
     secret: ${GOOGLE_RECAPTCHA_SECRET}
     public: ${GOOGLE_RECAPTCHA_PUBLIC}
+    verify:
+      url: ${GOOGLE_RECAPTCHA_VERIFY_URL}

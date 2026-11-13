@@ -15,14 +15,14 @@
          th:data-color="${alertaNotificacion.colorBoton}"
          hidden>
     </div>
-    <!-- 1. Importar el CSS (Opcional) -->
+
     <link th:href="@{/css/sweetalert2.min.css}" rel="stylesheet">
-    <!-- 2. Importar el JavaScript de SweetAlert2 -->
+    <script th:src="@{/js/htmx.min.js}"></script>
     <script th:src="@{/js/sweetalert2.all.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <link th:href="@{/css/animate.min.css}" rel="stylesheet">
-    <link rel="icon"  th:href="@{/images/favico.png}">
+    <link rel="icon" th:href="@{/images/favico.png}">
 </head>
 <body class="bg-gray-50 font-sans text-gray-900 antialiased">
 
@@ -31,7 +31,8 @@
 <!-- ========================================== -->
 <div class="fixed top-0 left-0 right-0 z-50">
     <!-- Primer Nav: Cabecera de Usuario -->
-    <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center" aria-label="Cabecera principal de usuario">
+    <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center"
+         aria-label="Cabecera principal de usuario">
         <div class="flex items-center gap-4">
             <div class="text-2xl font-black tracking-tight text-blue-800">UAFE</div>
             <div class="h-6 w-px bg-gray-300 mx-2"></div>
@@ -54,9 +55,12 @@
 
             <!-- Botón Salir -->
             <form th:action="@{/auth/logout}" method="POST" class="inline">
-                <button type="submit" class="inline-flex items-center gap-2 text-red-500 hover:text-red-700 text-sm font-bold transition-colors bg-transparent border-0 p-0 cursor-pointer focus:outline-none">
-                    <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                <button type="submit"
+                        class="inline-flex items-center gap-2 text-red-500 hover:text-red-700 text-sm font-bold transition-colors bg-transparent border-0 p-0 cursor-pointer focus:outline-none">
+                    <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                         class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"/>
                     </svg>
                     <span>Salir</span>
                 </button>
@@ -71,10 +75,12 @@
             <!-- Botón Hamburguesa (Solo visible en Móvil) -->
             <button id="mobile-menu-btn" type="button" onclick="toggleMobileNav()"
                     class="md:hidden flex items-center space-x-2.5 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100/80 hover:text-gray-900 transition-colors focus:outline-none">
-                <svg class="w-6 h-6 transition-transform duration-300" id="icon-hamburger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 transition-transform duration-300" id="icon-hamburger" fill="none"
+                     stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
-                <svg class="w-6 h-6 hidden transition-transform duration-300" id="icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 hidden transition-transform duration-300" id="icon-close" fill="none"
+                     stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
                 <span class="font-semibold text-sm tracking-wide">Menú</span>
@@ -91,9 +97,10 @@
                             <div class="w-5 h-5 flex items-center justify-center text-gray-500 group-hover:text-gray-800 group-hover:scale-105 transition-all duration-200"
                                  th:utext="${menu.img}"></div>
                             <span class="font-medium text-sm tracking-wide" th:text="${menu.etiqueta}">Padre</span>
-                            <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"
+                            <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2.2"
+                                 stroke="currentColor"
                                  class="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-700 transition-transform duration-300 ease-out group-hover:rotate-180">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
                             </svg>
 
                             <!-- Barra de Carga Inferior Plomo Oscuro -->
@@ -128,8 +135,10 @@
         </div>
 
         <!-- MENÚ MÓVIL DESPLEGABLE (Acordeón Recursivo) -->
-        <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-gray-100 bg-white max-h-[75vh] overflow-y-auto px-4 py-3 shadow-inner space-y-1">
-            <th:block th:replace="~{::renderMobileSubmenus(listaHijos=${#lists.toList(user.menus).?[idMenuPadre == null]}, todosLosMenus=${user.menus})}"></th:block>
+        <div id="mobile-nav-drawer"
+             class="hidden md:hidden border-t border-gray-100 bg-white max-h-[75vh] overflow-y-auto px-4 py-3 shadow-inner space-y-1">
+            <th:block
+                    th:replace="~{::renderMobileSubmenus(listaHijos=${#lists.toList(user.menus).?[idMenuPadre == null]}, todosLosMenus=${user.menus})}"></th:block>
         </div>
     </nav>
 </div>
@@ -146,11 +155,12 @@
                 <div class="flex items-center space-x-3">
                     <div class="w-4 h-4 flex items-center justify-center text-gray-400 group-hover/item:text-gray-700 group-hover/item:scale-105 transition-all duration-200"
                          th:utext="${sub.img}"></div>
-                    <span class="font-medium group-hover/item:translate-x-0.5 transition-transform duration-150" th:text="${sub.etiqueta}">Submenú</span>
+                    <span class="font-medium group-hover/item:translate-x-0.5 transition-transform duration-150"
+                          th:text="${sub.etiqueta}">Submenú</span>
                 </div>
                 <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
                      class="w-3.5 h-3.5 text-gray-400 group-hover/item:text-gray-700 group-hover/item:translate-x-1 transition-all duration-200">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
                 </svg>
 
                 <!-- Barra de Carga Inferior Plomo en Submenú -->
@@ -163,7 +173,8 @@
                class="relative overflow-hidden flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100/80 hover:text-gray-900 whitespace-nowrap transition-all duration-150 group/item">
                 <div class="w-4 h-4 flex items-center justify-center text-gray-400 group-hover/item:text-gray-700 group-hover/item:scale-105 transition-all duration-200"
                      th:utext="${sub.img}"></div>
-                <span class="group-hover/item:translate-x-0.5 transition-transform duration-150" th:text="${sub.etiqueta}">Submenú Final</span>
+                <span class="group-hover/item:translate-x-0.5 transition-transform duration-150"
+                      th:text="${sub.etiqueta}">Submenú Final</span>
 
                 <!-- Barra de Carga Inferior Plomo en Submenú -->
                 <span class="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-slate-600/85 to-gray-400/60 group-hover/item:w-full transition-all duration-300 ease-out"></span>
@@ -189,15 +200,18 @@
                 <button type="button" onclick="toggleAccordion(this)"
                         class="w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100/80 hover:text-gray-900 rounded-lg transition-colors">
                     <div class="flex items-center space-x-3">
-                        <div class="w-5 h-5 flex items-center justify-center text-gray-500" th:utext="${item.img}"></div>
+                        <div class="w-5 h-5 flex items-center justify-center text-gray-500"
+                             th:utext="${item.img}"></div>
                         <span th:text="${item.etiqueta}">Categoría Móvil</span>
                     </div>
-                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-300 accordion-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-300 accordion-arrow" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
                     </svg>
                 </button>
                 <div class="hidden pl-4 ml-3.5 border-l border-gray-300 space-y-1 mt-1">
-                    <th:block th:replace="~{::renderMobileSubmenus(listaHijos=${subHijos}, todosLosMenus=${todosLosMenus})}"></th:block>
+                    <th:block
+                            th:replace="~{::renderMobileSubmenus(listaHijos=${subHijos}, todosLosMenus=${todosLosMenus})}"></th:block>
                 </div>
             </div>
 

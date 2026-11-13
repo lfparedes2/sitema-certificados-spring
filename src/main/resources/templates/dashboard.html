@@ -4,110 +4,132 @@
 
 <!-- Solo escribes el contenido del Main, el resto lo hereda del layout automáticamente -->
 <!-- Contenedor Principal Adaptativo de Trámites -->
-
-<main class="flex-grow max-w-screen-2xl w-full mx-auto p-6">
-    <!-- Ejemplo de botón para probar que funcione localmente -->
-    <button onclick="mostrarAlerta()">Probar Alerta Local</button>
-
-    <script>
-
-    </script>
+<main class="flex-grow max-w-screen-2xl w-full mx-auto p-5">
 
     <!-- Título de Sección Operativa -->
-    <div class="mb-8">
+    <div class="mb-7">
         <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Seleccione el Tipo de Trámite</h1>
-        <p class="text-sm text-gray-500 mt-1">Gestione sus consultas y descargas de certificados de forma rápida y segura.</p>
+        <p class="text-sm text-gray-500 mt-1">Gestione sus consultas y descargas de certificados de forma rápida y
+            segura.</p>
     </div>
 
-    <!-- Grid de Cards de Certificados (Responsivo: 1 Columna en móvil, 2 en tablets y 4 en escritorios) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <!-- Grid de Cards de Certificados (Responsivo: 1 columna en móvil, 2 en tablet, 4 en escritorio) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-1 sm:px-0 mb-12">
 
-        <!-- Card: Certificado Homónimos (Azul) -->
-        <div class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-blue-300 transition-all cursor-pointer flex flex-col justify-between objeto-interactivo animate__animated"
-             onmouseenter="this.classList.add('animate__animated', 'animate__pulse', 'animate__fast'); this.style.animationPlayState = 'running'; this.hoverTimer = setTimeout(() => { this.style.animationPlayState = 'paused'; }, 250);"
-             onmouseleave="clearTimeout(this.hoverTimer); this.style.animationPlayState = 'running'; this.classList.remove('animate__animated', 'animate__pulse', 'animate__fast');">
-            <div class="h-32 bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                <!-- Icono Vectorial SVG Puro Opciones de Coincidencia -->
-                <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <!-- Card 1: Certificado Homónimos (Azul) -->
+        <div class="min-w-0 group relative hover:z-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-md shadow-slate-200/70 border border-slate-200/90 ring-1 ring-inset ring-white/80 overflow-hidden hover:border-blue-400 hover:shadow-xl hover:shadow-blue-900/10 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between objeto-interactivo">
+
+            <div class="h-28 sm:h-32 w-full overflow-hidden border-b border-slate-200/60 bg-blue-50/50 relative shrink-0">
+                <img th:src="@{/images/homonimo.webp}"
+                     alt="Certificado Homónimos"
+                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
             </div>
-            <div class="p-5 flex-1 flex flex-col justify-between">
+
+            <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-gray-800 mb-1 text-sm">Certificado Homónimos</h3>
-                    <p class="text-[11px] text-gray-500 mb-4 leading-relaxed">Verificación de coincidencias de nombres en bases de datos de control de la unidad.</p>
+                    <h3 class="font-bold text-slate-800 mb-1.5 text-base sm:text-sm tracking-tight">Certificado
+                        Homónimos / Sentenciados</h3>
+                    <p class="text-xs sm:text-[11px] text-slate-500 mb-5 leading-relaxed">Verificación de coincidencias
+                        de nombres en bases de datos de control de la unidad.</p>
                 </div>
-                <button class="w-full py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors" style="color: white !important;">
-                    Generar Solicitud
+                <button type="button" onclick="document.getElementById('miModal').showModal()"
+                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-blue-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-blue-700 active:bg-blue-800 transition-colors"
+                        style="color: white !important;">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
+                    <span class="relative z-10">Generar Solicitud</span>
                 </button>
             </div>
         </div>
 
-        <!-- Card: Sentenciados (Naranja) -->
-        <div class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between"
-             onmouseenter="this.classList.add('animate__animated', 'animate__pulse', 'animate__fast'); this.style.animationPlayState = 'running'; this.hoverTimer = setTimeout(() => { this.style.animationPlayState = 'paused'; }, 250);"
-             onmouseleave="clearTimeout(this.hoverTimer); this.style.animationPlayState = 'running'; this.classList.remove('animate__animated', 'animate__pulse', 'animate__fast');">
-            <div class="h-32 bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
-                <!-- Icono Vectorial SVG Puro Mazo Judicial -->
-                <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+        <!-- Card 2: Exclusion (Naranja) -->
+        <div class="min-w-0 group relative hover:z-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-md shadow-slate-200/70 border border-slate-200/90 ring-1 ring-inset ring-white/80 overflow-hidden hover:border-orange-400 hover:shadow-xl hover:shadow-orange-900/10 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between">
+
+            <div class="h-28 sm:h-32 w-full overflow-hidden border-b border-slate-200/60 bg-orange-50/50 relative shrink-0">
+                <img th:src="@{/images/exclusion.webp}"
+                     alt="Sentenciados"
+                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
             </div>
-            <div class="p-5 flex-1 flex flex-col justify-between">
+
+            <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-gray-800 mb-1 text-sm">Sentenciados</h3>
-                    <p class="text-[11px] text-gray-500 mb-4 leading-relaxed">Búsqueda selectiva de registros en listas de sentencias penales vigentes.</p>
+                    <h3 class="font-bold text-slate-800 mb-1.5 text-base sm:text-sm tracking-tight">Certificado
+                        Exclusión</h3>
+                    <p class="text-xs sm:text-[11px] text-slate-500 mb-5 leading-relaxed">Trámite para descargo o
+                        exclusión regulada de bases específicas del sistema.</p>
                 </div>
-                <button class="w-full py-2 bg-orange-500 text-white rounded-lg text-xs font-bold hover:bg-orange-600 transition-colors" style="color: white !important;">
-                    Consultar Registro
+                <button type="button"
+                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-orange-500 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-orange-600 active:bg-orange-700 transition-colors"
+                        style="color: white !important;">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
+                    <span class="relative z-10">Solicitar Exclusión</span>
                 </button>
             </div>
         </div>
 
-        <!-- Card: Certificado Exclusión (Morado) -->
-        <div class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between"
-             onmouseenter="this.classList.add('animate__animated', 'animate__pulse', 'animate__fast'); this.style.animationPlayState = 'running'; this.hoverTimer = setTimeout(() => { this.style.animationPlayState = 'paused'; }, 250);"
-             onmouseleave="clearTimeout(this.hoverTimer); this.style.animationPlayState = 'running'; this.classList.remove('animate__animated', 'animate__pulse', 'animate__fast');">
-            <div class="h-32 bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
-                <!-- Icono Vectorial SVG Puro Usuario Excluido -->
-                <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/></svg>
+        <!-- Card 4: Certificado Fallecidos (Gris) -->
+        <div class="min-w-0 group relative hover:z-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-md shadow-slate-200/70 border border-slate-200/90 ring-1 ring-inset ring-white/80 overflow-hidden hover:border-slate-400 hover:shadow-xl hover:shadow-slate-900/10 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between">
+
+            <div class="h-28 sm:h-32 w-full overflow-hidden border-b border-slate-200/60 bg-slate-100/50 relative shrink-0">
+                <img th:src="@{/images/fallecidos.webp}"
+                     alt="Certificado Fallecidos"
+                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
             </div>
-            <div class="p-5 flex-1 flex flex-col justify-between">
+
+            <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-gray-800 mb-1 text-sm">Certificado Exclusión</h3>
-                    <p class="text-[11px] text-gray-500 mb-4 leading-relaxed">Trámite para descargo o exclusión regulada de bases específicas del sistema.</p>
+                    <h3 class="font-bold text-slate-800 mb-1.5 text-base sm:text-sm tracking-tight">Certificado Personas
+                        Fallecidas</h3>
+                    <p class="text-xs sm:text-[11px] text-slate-500 mb-5 leading-relaxed">Validación e informe de datos
+                        de defunción cruzados con Registro Civil.</p>
                 </div>
-                <button class="w-full py-2 bg-purple-600 text-white rounded-lg text-xs font-bold hover:bg-purple-700 transition-colors" style="color: white !important;">
-                    Solicitar Baja
+                <button type="button"
+                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-gray-700 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-gray-800 active:bg-gray-900 transition-colors"
+                        style="color: white !important;">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
+                    <span class="relative z-10">Generar Solicitud</span>
                 </button>
             </div>
         </div>
 
-        <!-- Card: Certificado Fallecidos (Gris) -->
-        <div class="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-gray-300 transition-all cursor-pointer flex flex-col justify-between"
-             onmouseenter="this.classList.add('animate__animated', 'animate__pulse', 'animate__fast'); this.style.animationPlayState = 'running'; this.hoverTimer = setTimeout(() => { this.style.animationPlayState = 'paused'; }, 250);"
-             onmouseleave="clearTimeout(this.hoverTimer); this.style.animationPlayState = 'running'; this.classList.remove('animate__animated', 'animate__pulse', 'animate__fast');">
-            <div class="h-32 bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                <!-- Icono Vectorial SVG Puro Alerta de Información -->
-                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <!-- Card 4: Manual de Uso (Morado) -->
+        <div class="min-w-0 group relative hover:z-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-md shadow-slate-200/70 border border-slate-200/90 ring-1 ring-inset ring-white/80 overflow-hidden hover:border-purple-400 hover:shadow-xl hover:shadow-purple-900/10 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between">
+
+            <div class="h-28 sm:h-32 w-full overflow-hidden border-b border-slate-200/60 bg-purple-50/50 relative shrink-0">
+                <img th:src="@{/images/manual.webp}"
+                     class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
             </div>
-            <div class="p-5 flex-1 flex flex-col justify-between">
+
+            <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                    <h3 class="font-bold text-gray-800 mb-1 text-sm">Certificado Fallecidos</h3>
-                    <p class="text-[11px] text-gray-500 mb-4 leading-relaxed">Validación e informe de datos de defunción cruzados con Registro Civil.</p>
+                    <h3 class="font-bold text-slate-800 mb-1.5 text-base sm:text-sm tracking-tight">Manual de Uso del
+                        Sistema</h3>
+                    <p class="text-xs sm:text-[11px] text-slate-500 mb-5 leading-relaxed">Manual de usuario para el
+                        manejo del sistema de certificados.</p>
                 </div>
-                <button class="w-full py-2 bg-gray-700 text-white rounded-lg text-xs font-bold hover:bg-gray-800 transition-colors" style="color: white !important;">
-                    Ver Detalles
+                <button type="button"
+                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-purple-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-purple-700 active:bg-purple-800 transition-colors"
+                        style="color: white !important;">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
+                    <span class="relative z-10">Descargar Manual</span>
                 </button>
             </div>
         </div>
+
     </div>
+
+
     <!-- Paneles de Datos e Historial Provenientes de la Base de Datos -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
 
         <!-- Panel: Ficha de Sesión Activa -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2 tracking-tight">Ficha de Datos de la Sesión</h2>
+            <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2 tracking-tight">Ficha de Datos
+                de la Sesión</h2>
             <div class="space-y-1.5 text-sm text-gray-600 flex flex-col">
                 <div class="py-1.5 flex justify-between border-b border-gray-100">
                     <span class="font-semibold text-gray-500">Cédula del Funcionario:</span>
-                    <span class="font-mono text-gray-800 font-bold bg-gray-100 px-2 py-0.5 rounded border border-gray-200/40 text-xs" th:text="${user.cedula}">0000000000</span>
+                    <span class="font-mono text-gray-800 font-bold bg-gray-100 px-2 py-0.5 rounded border border-gray-200/40 text-xs"
+                          th:text="${user.cedula}">0000000000</span>
                 </div>
                 <div class="py-1.5 flex justify-between border-b border-gray-100">
                     <span class="font-semibold text-gray-500">Nombre de Usuario (Login):</span>
@@ -115,17 +137,20 @@
                 </div>
                 <div class="py-1.5 flex justify-between">
                     <span class="font-semibold text-gray-500">Email Corporativo:</span>
-                    <span class="text-blue-600 font-semibold break-all" th:text="${user.email}">correo@empresa.com</span>
+                    <span class="text-blue-600 font-semibold break-all"
+                          th:text="${user.email}">correo@empresa.com</span>
                 </div>
             </div>
         </div>
 
         <!-- Panel: Roles Activos -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2 tracking-tight">Roles Activos Asignados</h2>
+            <h2 class="text-sm font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2 tracking-tight">Roles Activos
+                Asignados</h2>
             <div class="flex flex-wrap gap-2">
                 <!-- Mapeo iterativo de Thymeleaf para pintar de forma estructurada los badges de roles -->
-                <span th:each="rol : ${user.rolesCodigos}" th:text="${rol}" class="inline-flex px-3 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-lg border border-gray-200 uppercase tracking-wide">
+                <span th:each="rol : ${user.rolesCodigos}" th:text="${rol}"
+                      class="inline-flex px-3 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-lg border border-gray-200 uppercase tracking-wide">
                         ROLE_CONSULTA
                     </span>
             </div>
@@ -159,8 +184,10 @@
                 <tr>
                     <td colspan="7" class="px-6 py-14 text-center text-gray-400 bg-white">
                         <div class="flex flex-col items-center justify-center max-w-sm mx-auto">
-                            <p class="font-bold text-gray-700 text-sm">No se encontraron registros de solicitudes anteriores.</p>
-                            <p class="text-xs text-gray-400 mt-1 leading-relaxed">Los trámites ejecutados en el sistema por su cuenta se verán reflejados en esta bitácora de auditoría.</p>
+                            <p class="font-bold text-gray-700 text-sm">No se encontraron registros de solicitudes
+                                anteriores.</p>
+                            <p class="text-xs text-gray-400 mt-1 leading-relaxed">Los trámites ejecutados en el sistema
+                                por su cuenta se verán reflejados en esta bitácora de auditoría.</p>
                         </div>
                     </td>
                 </tr>
@@ -168,6 +195,14 @@
             </table>
         </div>
     </div>
+
+    <button type="button"
+            onclick="document.getElementById('modalSolicitud').showModal()"
+            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+        + Nueva Solicitud
+    </button>
+
+    <div th:replace="~{dashboard/fragments/modal-solicitud-homonimo :: modalSolicitud}"></div>
 </main>
 
 </body>
