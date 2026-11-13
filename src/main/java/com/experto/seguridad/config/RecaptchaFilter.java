@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,9 +20,10 @@ import java.util.Map;
 @Component // <-- AGREGADO: Permite que Spring maneje este filtro como un Bean
 public class RecaptchaFilter extends OncePerRequestFilter {
 
-    // Nota: Es una buena práctica en el futuro mover esto a tu application.properties usando @Value("${google.recaptcha.secret}")
-    private static final String RECAPTCHA_SECRET = "6LfclFwUAAAAAAX57E87Hl2tTyeywHy97462fM1W";
     private static final String RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
+
+    @Value("${google.recaptcha.secret}")
+    private String recaptchaSecret;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -54,7 +56,7 @@ public class RecaptchaFilter extends OncePerRequestFilter {
 
             // 2. Configurar los parámetros en el cuerpo (Body) de la petición como exige Google
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("secret", RECAPTCHA_SECRET);
+            map.add("secret", recaptchaSecret);
             map.add("response", recaptchaResponse);
 
             HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
