@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org" lang="es">
 <body>
 
 <!-- Modal adaptado a Flowbite (z-40 para que el #global-loader quede siempre encima) -->
+<!-- Cambia la etiqueta de apertura de tu modal por esta -->
 <div th:fragment="modalSolicitud"
      id="modalSolicitud"
      tabindex="-1"
      aria-hidden="true"
      data-modal-backdrop="static"
-     class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 justify-center items-center w-full h-full p-4">
+     style="z-index: 50;"
+     class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 justify-center items-center w-full h-full bg-slate-900/75 backdrop-blur-sm p-4">
+
 
     <div class="relative w-full max-w-md max-h-full animate__animated animate__zoomIn animate__faster">
         <!-- Contenedor visual idéntico al que tenías -->
