@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://thymeleaf.org" th:fragment="pagina(header, contenido)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresa</title>
+    <link rel="icon" th:href="@{/images/favico.png}">
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script th:src="@{/js/func_ex.js}"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body hx-indicator="#global-loader"
+      class="bg-[url('https://plus.unsplash.com/premium_photo-1681487178876-a1156952ec60?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen flex flex-col font-sans antialiased m-0 p-0">
+<!-- 2. OVERLAY DE CARGA GLOBAL -->
+<div id="global-loader"
+     class="htmx-indicator fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900/75 backdrop-blur-sm">
+    <div class="h-14 w-14 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500"></div>
+    <p class="mt-4 text-lg font-semibold text-white tracking-wide">
+        Procesando solicitud...
+    </p>
+</div>
+
+<header class="w-full">
+    <th:block th:replace="${header}"></th:block>
+</header>
+
+<div class="h-[75px]"></div>
+
+<main class="flex-grow w-full flex flex-col justify-center items-center px-4 animate__animated animate__fadeIn animate__repeat-1">
+    <th:block th:replace="${contenido}"></th:block>
+</main>
+
+<footer class="w-full bg-white/90 backdrop-blur-sm border-t border-gray-200 mt-auto py-4 px-6 text-center text-xs text-gray-500 font-medium">
+    <div>© 2026 UAFE - Unidad de Análisis Financiero y Económico. Todos los derechos reservados.</div>
+</footer>
+
+</body>
+
+</html>

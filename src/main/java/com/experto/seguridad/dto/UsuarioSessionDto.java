@@ -1,5 +1,11 @@
 package com.experto.seguridad.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -11,6 +17,9 @@ public record UsuarioSessionDto(
         String email,
         String cedula,
         String tipo,
+        @JsonSerialize(using = LocalDateSerializer.class)
+        @JsonDeserialize(using = LocalDateDeserializer.class)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate fechaCaducidaPasaporte,
         List<String> rolesCodigos,
         List<MenuInfo> menus
@@ -22,5 +31,6 @@ public record UsuarioSessionDto(
             String img,
             Integer orden,
             Long idMenuPadre
-    ) implements Serializable {}
+    ) implements Serializable {
+    }
 }

@@ -20,7 +20,6 @@ public class DashboardController {
         if (userSession == null) {
             return "redirect:/auth/login";
         }
-
         // Código para imprimir el objeto completo en formato JSON
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -42,7 +41,6 @@ public class DashboardController {
         if (userSession == null) {
             return "redirect:/auth/login";
         }
-
         // Validamos si la ruta "/dashboard/usuarios" está permitida para este usuario
         boolean hasAccess = userSession.menus().stream()
                 .anyMatch(menu -> "/dashboard/usuarios".equalsIgnoreCase(menu.accion()));
@@ -66,7 +64,7 @@ public class DashboardController {
         if (userSession == null) return "redirect:/auth/login";
 
         String currentUri = request.getRequestURI();
-        
+
         boolean hasAccess = userSession.menus().stream()
                 .anyMatch(menu -> currentUri.equalsIgnoreCase(menu.accion()));
 
@@ -74,11 +72,11 @@ public class DashboardController {
             model.addAttribute("errorStatus", "403 - No Autorizado");
             model.addAttribute("errorMessage", "Tu rol no tiene acceso asignado a la ruta: " + currentUri);
             model.addAttribute("user", userSession);
-            return "dashboard"; 
+            return "dashboard";
         }
 
         model.addAttribute("user", userSession);
-        return "dashboard"; 
+        return "dashboard";
     }
 
     @GetMapping("/usuarios/consultar")
@@ -87,7 +85,6 @@ public class DashboardController {
         if (userSession == null) {
             return "redirect:/auth/login";
         }
-
         // Mantenemos tu misma validación de seguridad para la ruta de usuarios
         boolean hasAccess = userSession.menus().stream()
                 .anyMatch(menu -> "/dashboard/usuarios".equalsIgnoreCase(menu.accion()));
@@ -98,14 +95,7 @@ public class DashboardController {
             model.addAttribute("user", userSession);
             return "dashboard";
         }
-
-        // ==========================================
-        // SIMULACIÓN DE CONSULTA Y LLAMADA AL BEAN
-        // ==========================================
-        // Aquí puedes realizar cualquier lógica de negocio simulada.
-        // Inyectamos la alerta ocupando tu AlertaUtil y el AlertaDto con Lombok
         AlertaUtil.exito(model, "¡Consulta Exitosa!", "Los datos del usuario han sido verificados en el sistema.");
-
         model.addAttribute("user", userSession);
 
         // Retorna la misma plantilla física para que se muestre la alerta al cargar

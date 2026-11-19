@@ -32,14 +32,26 @@
                     <p class="text-xs sm:text-[11px] text-slate-500 mb-5 leading-relaxed">Verificación de coincidencias
                         de nombres en bases de datos de control de la unidad.</p>
                 </div>
-                <button type="button" onclick="document.getElementById('miModal').showModal()"
-                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-blue-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-blue-700 active:bg-blue-800 transition-colors"
+                <button type="button" onclick="document.getElementById('modalSolicitud').showModal()"
+                        class="group relative overflow-hidden w-full py-2.5 sm:py-2 bg-blue-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-blue-700 active:bg-blue-800 transition-colors flex items-center justify-center gap-1.5"
                         style="color: white !important;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" class="w-4 h-4 relative z-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                    </svg>
+
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
                     <span class="relative z-10">Generar Solicitud</span>
                 </button>
             </div>
         </div>
+
+        <button type="button"
+                data-modal-target="modalSolicitud"
+                data-modal-toggle="modalSolicitud"
+                class="bg-blue-600 text-white px-4 py-2 rounded-xl">
+            Nueva Solicitud
+        </button>
 
         <!-- Card 2: Exclusion (Naranja) -->
         <div class="min-w-0 group relative hover:z-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-md shadow-slate-200/70 border border-slate-200/90 ring-1 ring-inset ring-white/80 overflow-hidden hover:border-orange-400 hover:shadow-xl hover:shadow-orange-900/10 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between">
@@ -58,11 +70,17 @@
                         exclusión regulada de bases específicas del sistema.</p>
                 </div>
                 <button type="button"
-                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-orange-500 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-orange-600 active:bg-orange-700 transition-colors"
+                        class="group relative overflow-hidden w-full py-2.5 sm:py-2 bg-orange-500 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-orange-600 active:bg-orange-700 transition-colors flex items-center justify-center gap-1.5"
                         style="color: white !important;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" class="w-4 h-4 relative z-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                    </svg>
+
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
                     <span class="relative z-10">Solicitar Exclusión</span>
                 </button>
+
             </div>
         </div>
 
@@ -83,11 +101,17 @@
                         de defunción cruzados con Registro Civil.</p>
                 </div>
                 <button type="button"
-                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-gray-700 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-gray-800 active:bg-gray-900 transition-colors"
+                        class="group relative overflow-hidden w-full py-2.5 sm:py-2 bg-gray-700 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-gray-800 active:bg-gray-900 transition-colors flex items-center justify-center gap-1.5"
                         style="color: white !important;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" class="w-4 h-4 relative z-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                    </svg>
+
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
                     <span class="relative z-10">Generar Solicitud</span>
                 </button>
+
             </div>
         </div>
 
@@ -107,11 +131,18 @@
                         manejo del sistema de certificados.</p>
                 </div>
                 <button type="button"
-                        class="relative overflow-hidden w-full py-2.5 sm:py-2 bg-purple-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-purple-700 active:bg-purple-800 transition-colors"
+                        class="group relative overflow-hidden w-full py-2.5 sm:py-2 bg-purple-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-purple-700 active:bg-purple-800 transition-colors flex items-center justify-center gap-1.5"
                         style="color: white !important;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" class="w-4 h-4 relative z-10">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                    </svg>
+
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full group-active:translate-x-full transition-transform duration-700 ease-in-out"></span>
                     <span class="relative z-10">Descargar Manual</span>
                 </button>
+
             </div>
         </div>
 
@@ -195,12 +226,6 @@
             </table>
         </div>
     </div>
-
-    <button type="button"
-            onclick="document.getElementById('modalSolicitud').showModal()"
-            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
-        + Nueva Solicitud
-    </button>
 
     <div th:replace="~{dashboard/fragments/modal-solicitud-homonimo :: modalSolicitud}"></div>
 </main>

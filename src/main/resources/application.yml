@@ -74,3 +74,10 @@ google:
     public: ${GOOGLE_RECAPTCHA_PUBLIC}
     verify:
       url: ${GOOGLE_RECAPTCHA_VERIFY_URL}
+
+app:
+  seguridad:
+    registro:
+      rol-externo-codigo: EXTERNO
+      estado-activo: ACTIVO
+      dias-vigencia-password: 30

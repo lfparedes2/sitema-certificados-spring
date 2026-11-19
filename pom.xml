@@ -61,6 +61,20 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+
+        <!-- HTMX interno -->
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>htmx.org</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+
+        <!-- Flowbite interno (para modales, dropdowns, etc.) -->
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>flowbite</artifactId>
+            <version>2.5.2</version>
+        </dependency>
     </dependencies>
 
     <build>
