@@ -35,6 +35,15 @@
                 <p class="text-sm text-slate-500">Ingresa tus credenciales corporativas</p>
             </div>
 
+            <!-- Alertas de Thymeleaf cuenta bloqueada -->
+            <div th:if="${param.locked}"
+                 class="bg-red-50 text-red-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-red-200 flex items-center gap-2 animate-pulse">
+                <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Tu cuenta se encuentra bloqueada por seguridad. Contacta al administrador.</span>
+            </div>
 
             <!-- Alertas de Thymeleaf -->
             <div th:if="${param.error}"
@@ -74,7 +83,7 @@
                 </p>
             </div>
 
-            <!-- Alerta de logout existente -->
+            <!-- Alerta de logout -->
             <div th:if="${param.logout}"
                  class="bg-emerald-50 text-emerald-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-emerald-200 flex items-center gap-2">
                 <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current" fill="none" viewBox="0 0 24 24">
@@ -82,6 +91,16 @@
                           d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
                 <span>Sesión destruida de forma segura.</span>
+            </div>
+
+            <!-- Alerta de logout existente -->
+            <div th:if="${param.newSession}"
+                 class="bg-emerald-50 text-emerald-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-emerald-200 flex items-center gap-2">
+                <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                <span>Tu sesión se cerró porque se inició sesión con este usuario en otro dispositivo o navegador.</span>
             </div>
 
             <!-- Alerta de timeout  -->

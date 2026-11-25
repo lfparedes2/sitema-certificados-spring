@@ -25,7 +25,7 @@ spring:
   sql:
     init:
       # Fuerza a Spring Boot a inicializar los scripts siempre
-      mode: always
+      mode: never
 
   jpa:
     # 1. Propiedad clave: Retrasa el data.sql hasta que Hibernate cree las tablas

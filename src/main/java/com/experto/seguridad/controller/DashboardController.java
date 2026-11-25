@@ -35,6 +35,16 @@ public class DashboardController {
         return "dashboard";
     }
 
+    @GetMapping("/accesoDenegado")
+    public String accesoDenegado(HttpSession session, Model model) {
+        UsuarioSessionDto userSession = (UsuarioSessionDto) session.getAttribute("USER_SESSION");
+        if (userSession == null) {
+            return "redirect:/auth/login";
+        }
+        model.addAttribute("user", userSession);
+        return "dashboard/accesoDenegado";
+    }
+
     @GetMapping("/usuarios")
     public String viewUsuarios(HttpSession session, Model model) {
         UsuarioSessionDto userSession = (UsuarioSessionDto) session.getAttribute("USER_SESSION");
@@ -56,27 +66,6 @@ public class DashboardController {
 
         // Retorna la plantilla HTML física que crearemos en resources/templates/dashboard/usuarios.html
         return "dashboard/usuarios";
-    }
-
-    @GetMapping("/**")
-    public String handleDynamicPages(HttpServletRequest request, HttpSession session, Model model) {
-        UsuarioSessionDto userSession = (UsuarioSessionDto) session.getAttribute("USER_SESSION");
-        if (userSession == null) return "redirect:/auth/login";
-
-        String currentUri = request.getRequestURI();
-
-        boolean hasAccess = userSession.menus().stream()
-                .anyMatch(menu -> currentUri.equalsIgnoreCase(menu.accion()));
-
-        if (!hasAccess) {
-            model.addAttribute("errorStatus", "403 - No Autorizado");
-            model.addAttribute("errorMessage", "Tu rol no tiene acceso asignado a la ruta: " + currentUri);
-            model.addAttribute("user", userSession);
-            return "dashboard";
-        }
-
-        model.addAttribute("user", userSession);
-        return "dashboard";
     }
 
     @GetMapping("/usuarios/consultar")
@@ -101,5 +90,27 @@ public class DashboardController {
         // Retorna la misma plantilla física para que se muestre la alerta al cargar
         return "dashboard/usuarios";
     }
+
+    @GetMapping("/**")
+    public String handleDynamicPages(HttpServletRequest request, HttpSession session, Model model) {
+        UsuarioSessionDto userSession = (UsuarioSessionDto) session.getAttribute("USER_SESSION");
+        if (userSession == null) return "redirect:/auth/login";
+
+        String currentUri = request.getRequestURI();
+
+        boolean hasAccess = userSession.menus().stream()
+                .anyMatch(menu -> currentUri.equalsIgnoreCase(menu.accion()));
+
+        if (!hasAccess) {
+            model.addAttribute("errorStatus", "403 - No Autorizado");
+            model.addAttribute("errorMessage", "Tu rol no tiene acceso asignado a la ruta: " + currentUri);
+            model.addAttribute("user", userSession);
+            return "dashboard";
+        }
+
+        model.addAttribute("user", userSession);
+        return "dashboard";
+    }
+
 
 }

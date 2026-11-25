@@ -1,5 +1,44 @@
 /**
  * =========================================================================
+ * MENU HAMBURGESA MOVILES
+ * =========================================================================
+ */
+document.addEventListener("DOMContentLoaded", () => {
+        const menuBtn = document.getElementById("menu-btn");
+        const menuList = document.getElementById("menu-list");
+        const iconOpen = document.getElementById("icon-open");
+        const iconClose = document.getElementById("icon-close");
+
+        menuBtn.addEventListener("click", () => {
+          // Alterna entre oculto y flex en móvil
+          menuList.classList.toggle("hidden");
+          menuList.classList.toggle("flex");
+
+          // Cambia el icono de hamburguesa por la X
+          iconOpen.classList.toggle("hidden");
+          iconClose.classList.toggle("hidden");
+        });
+      });
+
+/**
+ * =========================================================================
+ * SEGURIDAD CSRF
+ * =========================================================================
+ */
+  document.addEventListener('DOMContentLoaded', function () {
+      document.body.addEventListener('htmx:configRequest', function (event) {
+          const csrfToken = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+          const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
+
+          if (csrfToken && csrfHeader) {
+              event.detail.headers[csrfHeader] = csrfToken;
+          }
+      });
+  });
+
+
+/**
+ * =========================================================================
  * MOTOR GLOBAL DE VALIDACIÓN INLINE Y RESETEO DE FORMULARIOS
  * Actívalo agregando `data-validar` a cualquier etiqueta <form>.
  * =========================================================================
