@@ -534,6 +534,98 @@ function iniciarMotorFormularios() {
     }
     iniciarMotorFormularios();
 
+
+
+    /**
+      * Efecto visual de sacudida (shake).
+      * Funciona al hacer clic en cualquier botón submit si el formulario no pasa la validación.
+      */
+     function sacudirElemento(form) {
+         if (!form) return;
+
+         // Evita mover el <main> completo para no desplazar toda la página
+         const contenedor = form.closest('dialog')
+             || form.closest('.shadow-2xl')
+             || form;
+
+         // Bloquea nuevas llamadas si ya se está sacudiendo
+         if (contenedor.dataset.sacudiendo === 'true') return;
+         contenedor.dataset.sacudiendo = 'true';
+
+         if (!document.getElementById('estilo-shake-validacion')) {
+             const style = document.createElement('style');
+             style.id = 'estilo-shake-validacion';
+             style.textContent = `
+                 @keyframes sacudidaError {
+                     0%, 100% { transform: translateX(0); }
+                     20%, 60% { transform: translateX(-8px); }
+                     40%, 80% { transform: translateX(8px); }
+                 }
+                 .animacion-shake {
+                     animation: sacudidaError 0.35s ease-in-out !important;
+                     will-change: transform;
+                 }
+                 /* Evita que el contenedor padre desborde sin alterar el body */
+                 .contener-desborde {
+                     overflow-x: clip !important;
+                 }
+             `;
+             document.head.appendChild(style);
+         }
+
+         // Se aplica 'overflow-x: clip' al padre directo (no al body) para evitar que el fondo salte
+         const padre = contenedor.parentElement;
+         if (padre) padre.classList.add('contener-desborde');
+
+         contenedor.classList.remove('animate__zoomIn', 'animate__fadeIn');
+         contenedor.classList.add('animacion-shake');
+
+         // Limpieza segura con fallback por si animationend falla
+         const limpiar = () => {
+             contenedor.classList.remove('animacion-shake');
+             if (padre) padre.classList.remove('contener-desborde');
+             delete contenedor.dataset.sacudiendo;
+         };
+
+         contenedor.addEventListener('animationend', limpiar, { once: true });
+         setTimeout(limpiar, 400);
+     }
+
+     // PARTE 2: Control unificado para evitar doble disparo (Click + Submit)
+     function evaluarYSacudir(form, eventoPrevented) {
+         setTimeout(() => {
+             const tieneErroresVisuales = form.querySelector('[data-error-msg]:not(.hidden), [data-client-error]:not(.hidden), #recaptcha-error:not(.hidden)');
+             const captchaVisible = document.getElementById('recaptcha-error')?.style.display === 'block';
+             const formInvalido = !form.checkValidity();
+
+             if (eventoPrevented || tieneErroresVisuales || captchaVisible || formInvalido) {
+                 sacudirElemento(form);
+             }
+         }, 10);
+     }
+
+     // A) Clic en el botón (solo actúa si el formulario es inválido y el navegador NO dispara submit)
+     document.addEventListener('click', (e) => {
+         const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+         if (!btn) return;
+
+         const form = btn.closest('form[data-validar]');
+         if (!form) return;
+
+         // Si checkValidity() es false, el evento 'submit' nativo nunca se disparará, así que lo manejamos aquí
+         if (!form.checkValidity()) {
+             evaluarYSacudir(form, e.defaultPrevented);
+         }
+     });
+
+     // B) Evento submit (cubre Enter en inputs y validaciones personalizadas JS como reCAPTCHA)
+     document.addEventListener('submit', (e) => {
+         const form = e.target;
+         if (!form || !form.matches('form[data-validar]')) return;
+
+         evaluarYSacudir(form, e.defaultPrevented);
+     });
+
     /**
      * =========================================================================
      * RECAPCHA GOOGLE

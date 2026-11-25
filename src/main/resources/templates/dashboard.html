@@ -32,7 +32,9 @@
                     <p class="text-xs sm:text-[11px] text-slate-500 mb-5 leading-relaxed">Verificación de coincidencias
                         de nombres en bases de datos de control de la unidad.</p>
                 </div>
-                <button type="button" onclick="document.getElementById('modalSolicitud').showModal()"
+                <button type="button"
+                        data-modal-target="modalSolicitud"
+                        data-modal-toggle="modalSolicitud"
                         class="group relative overflow-hidden w-full py-2.5 sm:py-2 bg-blue-600 text-white rounded-xl text-xs font-bold tracking-wide shadow-sm hover:bg-blue-700 active:bg-blue-800 transition-colors flex items-center justify-center gap-1.5"
                         style="color: white !important;">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -46,12 +48,6 @@
             </div>
         </div>
 
-        <button type="button"
-                data-modal-target="modalSolicitud"
-                data-modal-toggle="modalSolicitud"
-                class="bg-blue-600 text-white px-4 py-2 rounded-xl">
-            Nueva Solicitud
-        </button>
 
         <!-- Card 2: Exclusion (Naranja) -->
         <div class="min-w-0 group relative hover:z-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-md shadow-slate-200/70 border border-slate-200/90 ring-1 ring-inset ring-white/80 overflow-hidden hover:border-orange-400 hover:shadow-xl hover:shadow-orange-900/10 hover:-translate-y-1.5 active:scale-[0.99] transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between">

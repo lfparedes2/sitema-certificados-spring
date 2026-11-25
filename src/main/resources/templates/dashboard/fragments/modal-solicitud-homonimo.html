@@ -10,6 +10,7 @@
      aria-hidden="true"
      data-modal-backdrop="static"
      style="z-index: 50;"
+     data-auto-reset="true"
      class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 justify-center items-center w-full h-full bg-slate-900/75 backdrop-blur-sm p-4">
 
 
@@ -35,8 +36,8 @@
             <!-- Formulario -->
             <form id="formSolicitud"
                   data-validar
-                  th:action="@{/solicitudes/guardar}"
-                  hx-post="/solicitudes/guardar"
+                  th:action="@{/auth/register2}"
+                  hx-post="/auth/register2"
                   hx-target="#tabla-solicitudes"
                   hx-swap="innerHTML"
                   hx-on::after-request="if(event.detail.successful) { this.reset(); document.querySelector('[data-modal-hide=\'modalSolicitud\']').click(); }"

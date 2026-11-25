@@ -696,6 +696,177 @@ function iniciarMotorFormularios() {
     };
     }
     iniciarMotorFormularios();
+
+ /**
+  * Efecto visual de sacudida (shake).
+  * Funciona al hacer clic en cualquier botón submit si el formulario no pasa la validación.
+  */
+ function sacudirElemento(form) {
+     if (!form) return;
+
+     // 1. Busca el contenedor ideal: <dialog>, <main>, la tarjeta con sombra (.shadow-2xl) o el mismo <form>
+     const contenedor = form.closest('dialog')
+         || form.closest('main')
+         || form.closest('.shadow-2xl')
+         || form;
+
+     // 2. Inyecta el CSS de la animación una sola vez (con !important para ganar sobre Animate.css)
+     if (!document.getElementById('estilo-shake-validacion')) {
+         const style = document.createElement('style');
+         style.id = 'estilo-shake-validacion';
+         style.textContent = `
+             @keyframes sacudidaError {
+                 0%, 100% { transform: translateX(0); }
+                 20%, 60% { transform: translateX(-8px); }
+                 40%, 80% { transform: translateX(8px); }
+             }
+             .animacion-shake {
+                 animation: sacudidaError 0.35s ease-in-out !important;
+             }
+         `;
+         document.head.appendChild(style);
+     }
+
+     // 3. Quita clases de Animate.css si existen (como animate__zoomIn) para que no bloqueen el transform
+     contenedor.classList.remove('animate__zoomIn', 'animate__fadeIn', 'animacion-shake');
+     void contenedor.offsetWidth; // Reinicia animación
+     contenedor.classList.add('animacion-shake');
+
+     contenedor.addEventListener('animationend', () => {
+         contenedor.classList.remove('animacion-shake');
+     }, { once: true });
+ }
+
+ // A) Se dispara al hacer CLIC en el botón Enviar/Guardar/Registrar
+ document.addEventListener('click', (e) => {
+     const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+     if (!btn) return;
+
+     const form = btn.closest('form[data-validar]');
+     if (!form) return;
+
+     // Espera 10ms a que todas las validaciones (campos, email, reCAPTCHA) terminen de ejecutarse
+     setTimeout(() => {
+         const tieneErroresVisuales = form.querySelector('[data-error-msg]:not(.hidden), [data-client-error]:not(.hidden), #recaptcha-error:not(.hidden)');
+         const captchaVisible = document.getElementById('recaptcha-error')?.style.display === 'block';
+         const formInvalido = !form.checkValidity();
+
+         if (e.defaultPrevented || tieneErroresVisuales || captchaVisible || formInvalido) {
+             sacudirElemento(form);
+         }
+     }, 10);
+ });
+
+ // B) También se dispara si el usuario presiona ENTER dentro de un input
+ document.addEventListener('submit', (e) => {
+     const form = e.target;
+     if (!form || !form.matches('form[data-validar]')) return;
+
+     setTimeout(() => {
+         if (e.defaultPrevented || !form.checkValidity()) {
+             sacudirElemento(form);
+         }
+     }, 10);
+ });
+
+ // C) Si Spring Boot devolvió errores tras recargar la página o hacer swap con HTMX
+ document.addEventListener('DOMContentLoaded', () => {
+     document.querySelectorAll('form[data-validar]').forEach((form) => {
+         if (form.querySelector('[data-server-error]')) {
+             sacudirElemento(form);
+         }
+     });
+ });
+
+function sacudirElemento(form) {
+    if (!form) return;
+
+    // 1. Inyecta el CSS de la animación una sola vez
+    if (!document.getElementById('estilo-shake-validacion')) {
+        const style = document.createElement('style');
+        style.id = 'estilo-shake-validacion';
+        style.textContent = `
+            @keyframes sacudidaError {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-7px); }
+                40%, 80% { transform: translateX(7px); }
+            }
+            .animacion-shake {
+                animation: sacudidaError 0.35s ease-in-out !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // 2. Evita que aparezca scroll horizontal en el modal padre durante la sacudida
+    const dialogPadre = form.closest('dialog');
+    if (dialogPadre) {
+        dialogPadre.style.overflowX = 'hidden';
+    }
+
+    // 3. Aplica la sacudida directamente al <form>
+    form.classList.remove('animate__zoomIn', 'animate__fadeIn', 'animacion-shake');
+    void form.offsetWidth; // Reinicia la animación en cada clic
+    form.classList.add('animacion-shake');
+
+    form.addEventListener('animationend', () => {
+        form.classList.remove('animacion-shake');
+    }, { once: true });
+}
+
+// A) Se dispara al hacer CLIC en el botón Enviar/Guardar/Registrar
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+    if (!btn) return;
+
+    const form = btn.closest('form[data-validar]');
+    if (!form) return;
+
+    setTimeout(() => {
+        const tieneErroresVisuales = form.querySelector('[data-error-msg]:not(.hidden), [data-client-error]:not(.hidden), #recaptcha-error:not(.hidden)');
+        const captchaVisible = form.querySelector('#recaptcha-error')?.style.display === 'block';
+        const formInvalido = !form.checkValidity();
+
+        if (e.defaultPrevented || tieneErroresVisuales || captchaVisible || formInvalido) {
+            sacudirElemento(form);
+        }
+    }, 10);
+});
+
+// B) También se dispara si el usuario presiona ENTER dentro de un input
+document.addEventListener('submit', (e) => {
+    const form = e.target;
+    if (!form || !form.matches('form[data-validar]')) return;
+
+    setTimeout(() => {
+        if (e.defaultPrevented || !form.checkValidity()) {
+            sacudirElemento(form);
+        }
+    }, 10);
+});
+
+// C) Si Spring Boot devolvió errores tras recargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('form[data-validar]').forEach((form) => {
+        if (form.querySelector('[data-server-error]')) {
+            sacudirElemento(form);
+        }
+    });
+});
+
+// D) Si Spring Boot devolvió errores tras un intercambio con HTMX
+document.addEventListener('htmx:afterSwap', (e) => {
+    const target = e.detail.target;
+    const form = (target.matches && target.matches('form[data-validar]'))
+        ? target
+        : target.querySelector('form[data-validar]');
+
+    if (form && form.querySelector('[data-server-error]')) {
+        sacudirElemento(form);
+    }
+});
+
+
 /*
 ====================================================================================================================================================================
                                               TABLA COMPLETA DE OPCIONES Y ATRlBUTOS DE USO

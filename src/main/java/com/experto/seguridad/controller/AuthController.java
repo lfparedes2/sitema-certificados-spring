@@ -31,7 +31,7 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegister(Model model) {
         model.addAttribute("usuario", new UsuarioRegistroDto("", "", "", "", "", "C", "EXTERNO", "", LocalDate.now()));
-        return "/public/registro";
+        return "public/registro";
     }
 
     @PostMapping("/register")
@@ -51,7 +51,20 @@ public class AuthController {
         } catch (IllegalArgumentException ex) {
             System.out.println("[REGISTRO LOG ERROR] Falla en lógica de negocio: " + ex.getMessage());
             model.addAttribute("error", ex.getMessage());
-            return "/public/registro";
+            return "public/registro";
         }
     }
+
+    @PostMapping("/register2")
+    public String registerUser() {
+
+        System.out.println("-------------------");
+        System.out.println("-------------------");
+        System.out.println("-------------------");
+        System.out.println("-------------------");
+        System.out.println("-------------------");
+
+        return "public/registro";
+    }
+
 }
