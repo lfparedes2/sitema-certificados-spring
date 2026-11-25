@@ -12,7 +12,7 @@ spring:
   config:
     import:
       - "optional:file:./config/application-secrets.properties"
-      - "optional:file:./config/application-secrets.properties"
+      - "optional:file:/etc/secrets/application-secrets.properties"
   application:
     name: modulo-seguridad-avanzado
 
