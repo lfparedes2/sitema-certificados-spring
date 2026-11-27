@@ -1,63 +1,51 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"
+<html lang="es" xmlns:th="http://thymeleaf.org"
       th:replace="~{public/layout/base :: pagina(~{public/layout/header :: navPublico}, ~{::#mi-contenido})}">
 <head>
     <title>Registro</title>
 </head>
 <body>
-
-<!-- Agregamos el id="mi-contenido" para que coincida con ~{#mi-contenido} -->
 <section id="mi-contenido" class="w-full flex justify-center">
     <div class="bg-white/70 backdrop-blur-md px-8 pb-8 pt-5 rounded-xl shadow-2xl w-full max-w-2xl">
         <h2 class="text-3xl font-extrabold text-center text-slate-800 mb-4">Registro de Usuarios</h2>
-        <!-- Error general de negocio -->
-        <div th:if="${error}"
-             class="bg-red-50 text-red-600 p-3.5 rounded-xl mb-5 text-sm font-medium border border-red-200 flex items-center gap-2 animate-pulse">
-            <svg xmlns="http://w3.org" class="h-5 w-5 stroke-current" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span th:text="${error}"></span>
-        </div>
 
-        <!-- Formulario con enlace al DTO y protección CSRF automática -->
-        <form id="formRegistro"
-              th:action="@{/auth/register}"
-              th:object="${usuario}"
-              hx-post="/auth/register"
-              hx-target="#formRegistro"
-              hx-swap="outerHTML"
+        <form id="formRegistro" th:fragment="formularioRegistro"
+              th:action="@{/auth/register}" th:object="${usuario}"
+              hx-post="/auth/register" hx-target="#formRegistro" hx-swap="outerHTML"
               hx-disabled-elt="find button[type='submit']"
-              method="POST"
-              class="grid grid-cols-1 gap-4"
-              data-validar>
+              method="POST" class="grid grid-cols-1 gap-4" data-validar>
 
-            <!-- 1. Tipo de Identificación (Cédula marcado por defecto) -->
+            <!-- Campo oculto para mantener el tipo ("EXTERNO") -->
+            <input type="hidden" th:field="*{tipo}"/>
+
+            <!-- Error general de negocio -->
+            <div th:if="${error}"
+                 class="bg-red-50 text-red-600 p-3.5 rounded-xl mb-1 text-sm font-medium border border-red-200 flex items-center gap-2 animate-pulse">
+                <svg xmlns="http://w3.org" class="h-5 w-5 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- 1. Tipo de Identificación -->
             <div class="group">
                 <span class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Identificación</span>
                 <div class="grid grid-cols-3 gap-3">
-                    <!-- Cédula -> C (Marcado por defecto con checked) -->
                     <label class="flex items-center justify-center gap-2 p-3 border border-slate-400 rounded-xl bg-slate-50/70 cursor-pointer hover:bg-white has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/70 has-[:checked]:text-indigo-700 transition">
-                        <input type="radio" name="tipoIdentificacion" value="C"
-                               th:checked="${usuario.tipoIdentificacion == null or usuario.tipoIdentificacion == 'C'}"
+                        <input type="radio" th:field="*{tipoIdentificacion}" value="C"
                                onchange="actualizarPlaceholderId(this.value)"
                                class="w-4 h-4 text-indigo-600 focus:ring-indigo-500"/>
                         <span class="text-sm font-semibold">Cédula</span>
                     </label>
-
-                    <!-- RUC -> R -->
                     <label class="flex items-center justify-center gap-2 p-3 border border-slate-400 rounded-xl bg-slate-50/70 cursor-pointer hover:bg-white has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/70 has-[:checked]:text-indigo-700 transition">
-                        <input type="radio" name="tipoIdentificacion" value="R"
-                               th:checked="${usuario.tipoIdentificacion == 'R'}"
+                        <input type="radio" th:field="*{tipoIdentificacion}" value="R"
                                onchange="actualizarPlaceholderId(this.value)"
                                class="w-4 h-4 text-indigo-600 focus:ring-indigo-500"/>
                         <span class="text-sm font-semibold">RUC</span>
                     </label>
-
-                    <!-- Pasaporte -> P -->
                     <label class="flex items-center justify-center gap-2 p-3 border border-slate-400 rounded-xl bg-slate-50/70 cursor-pointer hover:bg-white has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/70 has-[:checked]:text-indigo-700 transition">
-                        <input type="radio" name="tipoIdentificacion" value="P"
-                               th:checked="${usuario.tipoIdentificacion == 'P'}"
+                        <input type="radio" th:field="*{tipoIdentificacion}" value="P"
                                onchange="actualizarPlaceholderId(this.value)"
                                class="w-4 h-4 text-indigo-600 focus:ring-indigo-500"/>
                         <span class="text-sm font-semibold">Pasaporte</span>
@@ -67,12 +55,11 @@
                    class="text-red-600 text-xs mt-1"></p>
             </div>
 
-            <!-- 2. Número de Identificación (Cédula) - Ancho completo -->
+            <!-- 2. Número de Identificación -->
             <div class="group">
                 <label for="cedula" class="block text-sm font-semibold text-slate-700">Número de Identificación</label>
                 <div class="relative mt-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
-                        <!-- Icono Tarjeta ID -->
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z"/>
@@ -88,36 +75,33 @@
                 </div>
                 <p th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}" class="text-red-600 text-xs mt-1"></p>
             </div>
-
-            <!-- 2-5. Nombres - Ancho completo -->
+            <!-- 3. Apellidos y Nombres Completos -->
             <div class="group">
                 <label for="nombre" class="block text-sm font-semibold text-slate-700">Apellidos y Nombres
                     Completos</label>
                 <div class="relative mt-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
-                        <!-- Icono Tarjeta ID -->
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z"/>
+                                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
                         </svg>
                     </div>
-                    <input id="nombre" type="text" th:field="*{nombre}" required minlength="5" maxlength="60"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]{5,15}$"
+                    <input id="nombre" type="text" th:field="*{nombre}" required minlength="5" maxlength="100"
+                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ ]{5,100}$"
                            data-msg-required="Los nombres son obligatorios."
                            data-msg-minlength="Debe ingresar al menos 5 caracteres."
-                           data-msg-pattern="Solo se permiten letras y números sin espacios."
+                           data-msg-pattern="Solo se permiten letras y espacios."
                            placeholder="Ej. Pepito Perez"
                            class="block w-full pl-11 pr-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
                 </div>
                 <p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="text-red-600 text-xs mt-1"></p>
             </div>
 
-            <!-- 3. Email - Ancho completo -->
+            <!-- 4. Email -->
             <div class="group">
                 <label for="email" class="block text-sm font-semibold text-slate-700">Email</label>
                 <div class="relative mt-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
-                        <!-- Icono Correo -->
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
@@ -133,18 +117,19 @@
                 <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-600 text-xs mt-1"></p>
             </div>
 
-            <!-- 4. Repita Email - Ancho completo -->
+            <!-- 5. Repita Email -->
             <div class="group">
                 <label for="repitaEmail" class="block text-sm font-semibold text-slate-700">Repita Email</label>
                 <div class="relative mt-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
-                        <!-- Icono Verificación Correo -->
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
                     </div>
-                    <input id="repitaEmail" name="repitaEmail" type="email" required maxlength="50" autocomplete="off"
+                    <!-- Cambiado name="repitaEmail" por th:field="*{repitaEmail}" -->
+                    <input id="repitaEmail" type="email" th:field="*{repitaEmail}" required maxlength="50"
+                           autocomplete="off"
                            data-msg-required="Debe repetir su correo electrónico."
                            data-msg-type="Ingresa un correo electrónico válido."
                            placeholder="Vuelva a escribir su correo"
@@ -152,26 +137,41 @@
                            oninput="validarCoincidenciaEmail()"
                            class="block w-full pl-11 pr-4 py-3 border border-slate-400 rounded-xl bg-slate-50/70 text-slate-900 placeholder-slate-500 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-200 font-medium"/>
                 </div>
-                <p id="errorEmailCoincidencia" class="hidden text-red-600 text-xs mt-1 font-medium">Los correos
-                    electrónicos
-                    no coinciden.</p>
+                <!-- Error en tiempo real (JS) -->
+                <p id="errorEmailCoincidencia" class="hidden text-red-600 text-xs mt-1 font-medium">
+                    Los correos electrónicos no coinciden.
+                </p>
+                <!-- Errores desde el DTO (@NotBlank y @AssertTrue isEmailCoincidente) -->
+                <p th:if="${#fields.hasErrors('repitaEmail')}" th:errors="*{repitaEmail}"
+                   class="text-red-600 text-xs mt-1"></p>
+                <p th:if="${#fields.hasErrors('emailCoincidente')}" th:errors="*{emailCoincidente}"
+                   class="text-red-600 text-xs mt-1 font-medium"></p>
             </div>
 
-            <!-- 5. Captcha (Compatible con tu RecaptchaFilter) -->
+            <!-- 6. Captcha -->
             <div class="flex flex-col items-center justify-center p-2">
-                <div class="g-recaptcha" data-sitekey="6LfclFwUAAAAANapD-yExHjaDlbDGc4u-d4AMZcB"
+                <div id="recaptcha-container" class="g-recaptcha"
+                     data-sitekey="6LfclFwUAAAAANapD-yExHjaDlbDGc4u-d4AMZcB"
                      data-callback="ocultarErrorRecaptcha"></div>
                 <p id="recaptcha-error" style="display: none;" class="text-xs text-red-600 mt-2 font-medium">
                     Por favor, completa la verificación de seguridad.
                 </p>
             </div>
 
-            <!-- 6. Botón Registrar -->
+            <!-- 7. Botón Registrar -->
             <button id="btnRegistrar" type="submit"
                     class="w-full bg-emerald-600 text-white font-bold py-3 rounded-lg hover:bg-emerald-700 shadow-lg mt-2 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                 Registrar Cuenta
             </button>
         </form>
+
+        <form th:action="@{/auth/register/consultar}" method="post" class="inline-block">
+            <button type="submit"
+                    class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors cursor-pointer shadow-sm">
+                + Nuevo Usuario
+            </button>
+        </form>
+
     </div>
 </section>
 </body>

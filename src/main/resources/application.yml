@@ -15,6 +15,9 @@ spring:
       - "optional:file:/etc/secrets/application-secrets.properties"
   application:
     name: modulo-seguridad-avanzado
+  output:
+    ansi:
+      enabled: ALWAYS
 
   datasource:
     url: ${DB_URL}
@@ -32,13 +35,16 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
     open-in-view: false
     properties:
       hibernate:
         default_schema: seguridad
         # Crea el esquema automáticamente en Postgres si no existe
         javax.persistence.create-database-schemas: true
+        format_sql: true
+        use_sql_comments: true
+        highlight_sql: true
   mail:
     host: ://tudominio.com
     port: 587
@@ -58,7 +64,9 @@ spring:
 logging:
   level:
     org.springframework.security: INFO
-
+    # --- NUEVO: Muestra consultas SQL y sus parámetros reales ---
+    #org.hibernate.SQL: DEBUG
+    #org.hibernate.orm.jdbc.bind: TRACE
 # ==========================================
 # CONFIGURACIÓN DE SEGURIDAD CUSTOM
 # ==========================================

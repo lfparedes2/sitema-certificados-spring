@@ -7,8 +7,10 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Empresa</title>
     <link rel="icon" th:href="@{/images/favico.png}">
+    <link th:href="@{/css/sweetalert2.min.css}" rel="stylesheet">
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script th:src="@{/js/sweetalert2.all.min.js}"></script>
     <script th:src="@{/js/func_ex.js}"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
@@ -37,6 +39,15 @@
     <div>© 2026 UAFE - Unidad de Análisis Financiero y Económico. Todos los derechos reservados.</div>
 </footer>
 
+<!-- Puente de datos entre Thymeleaf y main.js -->
+<div id="alerta-data"
+     th:if="${alertaNotificacion != null}"
+     th:data-tipo="${alertaNotificacion.tipo}"
+     th:data-titulo="${alertaNotificacion.titulo}"
+     th:data-mensaje="${alertaNotificacion.mensaje}"
+     th:data-tiempo="${alertaNotificacion.tiempo}"
+     th:data-color="${alertaNotificacion.colorBoton}"
+     hidden>
+</div>
 </body>
-
 </html>
