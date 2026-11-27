@@ -11,7 +11,7 @@
 
         <form id="formRegistro" th:fragment="formularioRegistro"
               th:action="@{/auth/register}" th:object="${usuario}"
-              hx-post="/auth/register" hx-target="#formRegistro" hx-swap="outerHTML"
+              
               hx-disabled-elt="find button[type='submit']"
               method="POST" class="grid grid-cols-1 gap-4" data-validar>
 
@@ -164,15 +164,18 @@
                 Registrar Cuenta
             </button>
         </form>
-
-        <form th:action="@{/auth/register/consultar}" method="post" class="inline-block">
-            <button type="submit"
-                    class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors cursor-pointer shadow-sm">
-                + Nuevo Usuario
-            </button>
-        </form>
-
     </div>
+
+
+    <script th:if="${mensajeExito}" th:inline="javascript">
+        Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: [[${mensajeExito}]],
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+
 </section>
 </body>
 </html>
