@@ -40,14 +40,16 @@
 </footer>
 
 <!-- Puente de datos entre Thymeleaf y main.js -->
-<div id="alerta-data"
-     th:if="${alertaNotificacion != null}"
-     th:data-tipo="${alertaNotificacion.tipo}"
-     th:data-titulo="${alertaNotificacion.titulo}"
-     th:data-mensaje="${alertaNotificacion.mensaje}"
-     th:data-tiempo="${alertaNotificacion.tiempo}"
-     th:data-color="${alertaNotificacion.colorBoton}"
-     hidden>
-</div>
+<script th:if="${alertaNotificacion != null}" th:inline="javascript">
+    const alerta = /*[[${alertaNotificacion}]]*/ {};
+
+    Swal.fire({
+        icon: alerta.tipo,
+        title: alerta.titulo,
+        text: alerta.mensaje,
+        timer: alerta.tiempo,
+        confirmButtonColor: alerta.colorBoton
+    });
+</script>
 </body>
 </html>

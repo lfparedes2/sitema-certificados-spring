@@ -11,7 +11,7 @@
 
         <form id="formRegistro" th:fragment="formularioRegistro"
               th:action="@{/auth/register}" th:object="${usuario}"
-              
+
               hx-disabled-elt="find button[type='submit']"
               method="POST" class="grid grid-cols-1 gap-4" data-validar>
 
@@ -165,16 +165,6 @@
             </button>
         </form>
     </div>
-
-
-    <script th:if="${mensajeExito}" th:inline="javascript">
-        Swal.fire({
-            icon: 'success',
-            title: '¡Registro exitoso!',
-            text: [[${mensajeExito}]],
-            confirmButtonText: 'Aceptar'
-        });
-    </script>
 
 </section>
 </body>

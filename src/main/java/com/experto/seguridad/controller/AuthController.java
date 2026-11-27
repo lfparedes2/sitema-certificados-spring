@@ -51,14 +51,22 @@ public class AuthController {
             RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            AlertaUtil.error(
+                    model,
+                    "Revisa los datos",
+                    "Hay campos que debes corregir.",
+                    4000,
+                    null
+            );
             return VISTA_REGISTRO;
         }
 
         try {
             registroUsuarioService.registrarUsuario(usuarioDto);
 
-            redirectAttributes.addFlashAttribute(
-                    "mensajeExito",
+            AlertaUtil.exitoRedirect(
+                    redirectAttributes,
+                    "¡Registro exitoso!",
                     "Los datos del usuario han sido registrados."
             );
 
@@ -70,20 +78,5 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register/consultar")
-    public String consultarUsuarioSimulado(Model model) {
-        System.out.println("Entra ....");
-        // Usa AlertaUtil.error() porque vas a retornar la vista directamente sin "redirect:"
-        AlertaUtil.error(
-                model,
-                "Error al guardar",
-                "No se pudo registrar el usuario.",
-                3000,
-                "#d33"
-        );
-
-        // Retorna el nombre de tu vista HTML actual (sin "redirect:")
-        return "public/registro";
-    }
 
 }
